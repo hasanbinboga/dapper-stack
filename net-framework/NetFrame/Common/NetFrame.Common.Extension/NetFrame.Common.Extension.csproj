@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NetFrame.Common.Exception\NetFrame.Common.Exception.csproj" />
+  </ItemGroup>
+
 </Project>

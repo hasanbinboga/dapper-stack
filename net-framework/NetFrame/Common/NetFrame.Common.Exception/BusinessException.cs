@@ -19,7 +19,7 @@ namespace NetFrame.Common.Exception
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="message">Business rules Exception mesaj bilgisi</param>
+        /// <param name="message">Business rules Exception message info </param>
         public BusinessException(string message) : base(message)
         {
             PersistException(this);
@@ -28,8 +28,8 @@ namespace NetFrame.Common.Exception
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="message">İş kuralı Exception mesaj bilgisi</param>
-        /// <param name="exception">İş kuralı Exception bilgisi</param>
+        /// <param name="message">Business rules Exception message info </param>
+        /// <param name="exception">Business rules Exception info</param>
         public BusinessException(string message, BaseException exception) : base(message, exception)
         {
             PersistException(this);
@@ -38,8 +38,8 @@ namespace NetFrame.Common.Exception
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="serializationInfo">İş kuralı Exception serialization bilgisi</param>
-        /// <param name="context">İş kuralı Exception stream context bilgisi</param>
+        /// <param name="serializationInfo">Business rules Exception serialization info</param>
+        /// <param name="context">Business rules Exception stream context info</param>
         public BusinessException(SerializationInfo serializationInfo, StreamingContext context)
             : base(serializationInfo, context)
         {
