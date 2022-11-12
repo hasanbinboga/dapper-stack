@@ -83,7 +83,7 @@ namespace NetFrame.Common.Extension
         /// Convert to Int32.
         /// </summary>
         /// <param name="value">Çevirilmek istenen string</param>
-        /// <returns>Int32 sonuç</returns>
+        /// <returns>Int32 result</returns>
         public static int? ToInt32(this string value)
         {
             int result;
@@ -97,8 +97,8 @@ namespace NetFrame.Common.Extension
         /// <summary>
         /// Convert to Int64.
         /// </summary>
-        /// <param name="value">Çevirilmek istenen string</param>
-        /// <returns>Int64 sonuç</returns>
+        /// <param name="value">Value</param>
+        /// <returns>Int64 result</returns>
         public static long? ToInt64(this string value)
         {
             long result;
@@ -112,8 +112,8 @@ namespace NetFrame.Common.Extension
         /// <summary>
         /// Convert to DateTime
         /// </summary>
-        /// <param name="value">çevrilmek istenen string</param>
-        /// <returns>DateTime sonuç</returns>
+        /// <param name="value">Value</param>
+        /// <returns>DateTime result</returns>
         public static DateTime? ToDateTime(this string value)
         {
             DateTime result;
@@ -127,8 +127,8 @@ namespace NetFrame.Common.Extension
         /// <summary>
         /// Convert to Decimal
         /// </summary>
-        /// <param name="value">çevrilmek istenen string</param>
-        /// <returns>Decimal sonuç</returns>
+        /// <param name="value">Value</param>
+        /// <returns>Decimal result</returns>
         public static decimal? ToDecimal(this string value)
         {
             decimal result;
@@ -143,8 +143,8 @@ namespace NetFrame.Common.Extension
         /// <summary>
         /// Checks whether the given string is suitable for the E-mail format.
         /// </summary>
-        /// <param name="value">Kontrol edilmek istenen string</param>
-        /// <returns>E-mail formatına uygun olup olmadığı sonucu</returns>
+        /// <param name="value">Value</param>
+        /// <returns>The result of whether it is suitable for the e-mail format</returns>
         public static bool IsEMail(this string value)
         {
             if (string.IsNullOrWhiteSpace(value))
