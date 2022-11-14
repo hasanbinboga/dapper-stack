@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace NetFrame.Common.Utils
 {
     /// <summary>
-    /// Uygulamanın kullanıcısından farklı bir Farklı bir ağ kimlik bilgisi kullanarak ağ bağlantısı oluşturma için geliştirilmiştir.
+    /// Developed to create a network connection using a different network credential than the user of the application.
     /// Detaylı bilgi için: https://gist.github.com/AlanBarber/92db36339a129b94b7dd
     /// 
     /// Kullanımı:

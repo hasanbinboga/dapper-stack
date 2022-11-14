@@ -4,26 +4,26 @@ using System.Security.Cryptography;
 namespace NetFrame.Common.Utils
 {
     /// <summary>
-    /// Şifre hash fonksiyonlarını içeren sınıf
+    /// Class containing password hash functions
     /// </summary>
     public sealed class SecurePasswordHasher
     {
         /// <summary>
-        /// Salt Boyutu
+        /// Salt Size
         /// </summary>
         private const int SaltSize = 16;
 
         /// <summary>
-        /// Hash boyutu
+        /// Hash size
         /// </summary>
         private const int HashSize = 20;
 
         /// <summary>
-        /// Şifreden Hash oluşturur
+        /// Generates Hash from Password
         /// </summary>
-        /// <param name="password">şifre</param>
-        /// <param name="iterations">tekrar sayısı</param>
-        /// <returns>hash değerini döner</returns>
+        /// <param name="password">password</param>
+        /// <param name="iterations">iteration count</param>
+        /// <returns>returns hash value</returns>
         public static string Hash(string password, int iterations)
         {
             //create salt
@@ -47,31 +47,31 @@ namespace NetFrame.Common.Utils
         }
 
         /// <summary>
-        /// varsayılan olarak 1000 tekrarla şifreyi hashler
+        ///by default hash the password with 1000 repetitions
         /// </summary>
-        /// <param name="password">şifre</param>
-        /// <returns>hash değeri</returns>
+        /// <param name="password">password</param>
+        /// <returns>hash value</returns>
         public static string Hash(string password)
         {
             return Hash(password, 10000);
         }
 
         /// <summary>
-        /// Hash değerinin desteklenip desteklenmediğini döner
+        /// Returns whether the hash value is supported
         /// </summary>
-        /// <param name="hashString">hash değeri</param>
-        /// <returns>Desteklenme durumu</returns>
+        /// <param name="hashString">hash value</param>
+        /// <returns>is supported</returns>
         public static bool IsHashSupported(string hashString)
         {
             return hashString.Contains("$MYHASH$V1$");
         }
 
         /// <summary>
-        /// Verilen şifrenin hash lenmiş halinin, verilen hash değeriyle aynı olma durumunu onaylar.
+        /// Confirms that the hash of the given password is the same as the given hash value.
         /// </summary>
-        /// <param name="password">Şifre</param>
+        /// <param name="password">Pass</param>
         /// <param name="hashedPassword">Hash</param>
-        /// <returns>Doğrulanma durumu.</returns>
+        /// <returns>Is verified</returns>
         public static bool Verify(string password, string hashedPassword)
         {
             //check hash

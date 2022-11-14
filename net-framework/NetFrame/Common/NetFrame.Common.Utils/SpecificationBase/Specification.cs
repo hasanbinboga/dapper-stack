@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetFrame.Common.Utils.SpecificationBase
+﻿namespace NetFrame.Common.Utils.SpecificationBase
 {
     /// <summary>
     /// 

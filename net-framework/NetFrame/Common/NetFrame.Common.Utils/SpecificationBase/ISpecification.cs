@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetFrame.Common.Utils.SpecificationBase
+﻿namespace NetFrame.Common.Utils.SpecificationBase
 {
     /// <summary>
-    ///  Örnek Uygulama: https://www.codeproject.com/Articles/670115/Specification-pattern-in-Csharp
-    ///  Detaylar için: http://enterprisecraftsmanship.com/2016/02/08/specification-pattern-c-implementation/
-    ///  Ayrıca Türkçe Kaynak: http://www.buraksenyurt.com/post/specification-tasarim-kalibina-gitmeye-calisirken-ben
+    ///  Samples: https://www.codeproject.com/Articles/670115/Specification-pattern-in-Csharp
+    ///  For Details: http://enterprisecraftsmanship.com/2016/02/08/specification-pattern-c-implementation/
+    ///  Turkish resource: http://www.buraksenyurt.com/post/specification-tasarim-kalibina-gitmeye-calisirken-ben
     ///  Not only does this approach removes domain knowledge duplication, 
     ///  it also allows for combining multiple specifications. 
     ///  That, in turn, helps us easily set up quite complex search and validation criteria.

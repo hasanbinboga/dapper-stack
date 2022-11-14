@@ -1,6 +1,4 @@
-﻿
-
-using NetFrame.Common.Exception;
+﻿using NetFrame.Common.Exception;
 using System.Collections;
 using System.DirectoryServices.AccountManagement;
 

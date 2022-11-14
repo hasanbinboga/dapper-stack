@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace NetFrame.Common.Utils
 {
     /// <summary>
-    /// Reflection yardımcı fonksiyonlarını içeren sınıf
+    /// Class containing Reflection helper functions
     /// </summary>
     public static class ReflectionHelper
     {
         /// <summary>
-        /// Parametre olarak verilen sınıfın fieldlarını liste olarak döner
+        /// Returns the fields of the class given as a parameter as a list
         /// </summary>
-        /// <param name="t">Sınıf tipi</param>
-        /// <returns>Sınıf field listesi</returns>
+        /// <param name="t">Type</param>
+        /// <returns>Class field list</returns>
         public static IEnumerable<FieldInfo> GetAllFields(Type t)
         {
             if (t == null)
@@ -26,10 +23,10 @@ namespace NetFrame.Common.Utils
             return t.GetFields(flags).Concat(GetAllFields(t.BaseType));
         }
         /// <summary>
-        /// Field adı verilen field'in fieldInfo'sunu dönmeyi sağlar.
+        /// Returns the fieldInfo of the field called Field
         /// </summary>
-        /// <param name="T">Sınıf tipi</param>
-        /// <param name="fieldName">Field adı</param>
+        /// <param name="T">Type</param>
+        /// <param name="fieldName">Field name</param>
         /// <returns>FieldInfo</returns>
         public static FieldInfo GetNamedField(Type T, string fieldName)
         {
@@ -57,10 +54,10 @@ namespace NetFrame.Common.Utils
             }
         }
         /// <summary>
-        /// Property adı verilen property'in propertyInfo'sunu dönmeyi sağlar.
+        /// Returns propertyInfo of property called property
         /// </summary>
-        /// <param name="T">Sınıf tipi</param>
-        /// <param name="propertyName">Property adı</param>
+        /// <param name="T">Type</param>
+        /// <param name="propertyName">Property name</param>
         /// <returns>PropertyInfo</returns>
         public static PropertyInfo GetNamedProperty(Type T, string propertyName)
         {
