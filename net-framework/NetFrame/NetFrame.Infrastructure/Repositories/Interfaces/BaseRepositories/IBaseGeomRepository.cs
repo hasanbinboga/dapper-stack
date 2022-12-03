@@ -10,11 +10,6 @@ namespace NetFrame.Infrastructure.Repositories
     /// <typeparam name="T"> Geometry field ı olan Entity türü </typeparam>
     public interface IBaseGeomRepository<T>: IRepository<T> where T: BaseGeomEntity
     {
-        /// <summary>
-        /// It performs the operation of fetching the data history of the human with the specified id value of the related object.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        List<AuditChange> GetAudit(long id);
+        
     }
 }

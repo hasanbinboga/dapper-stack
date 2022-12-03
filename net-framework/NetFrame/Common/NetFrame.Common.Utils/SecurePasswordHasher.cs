@@ -31,7 +31,7 @@ namespace NetFrame.Common.Utils
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[SaltSize]);
 
             //create hash
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations);
+            Rfc2898DeriveBytes pbkdf2 = new(password, salt, iterations);
             var hash = pbkdf2.GetBytes(HashSize);
 
             //combine salt and hash

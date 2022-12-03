@@ -71,7 +71,7 @@ namespace NetFrame.Common.Utils
                                  BindingFlags.DeclaredOnly | BindingFlags.IgnoreCase;
             try
             {
-                PropertyInfo info = T.GetProperty(propertyName, flags);
+                PropertyInfo info = T?.GetProperty(propertyName, flags);
                 if (info == null)
                 {
                     return GetNamedProperty(T.BaseType, propertyName);

@@ -274,13 +274,11 @@ namespace NetFrame.Common.Utils
             {
                 var oUserPrincipal = GetUser(sUserName);
                 var oGroupPrincipal = GetGroup(sGroupName);
-                if (oUserPrincipal == null || oGroupPrincipal == null)
+                if (oUserPrincipal != null && oGroupPrincipal != null)
                 {
                     if (!IsUserGroupMember(sUserName, sGroupName))
                     {
-                        // ReSharper disable once PossibleNullReferenceException
-                        // ReSharper disable once AssignNullToNotNullAttribute
-                        oGroupPrincipal.Members.Add(oUserPrincipal);
+                        oGroupPrincipal?.Members.Add(oUserPrincipal);
                         oGroupPrincipal.Save();
                     }
                 }
@@ -305,7 +303,7 @@ namespace NetFrame.Common.Utils
                 var oUserPrincipal = GetUser(sUserName);
                 var oGroupPrincipal = GetGroup(sGroupName);
 
-                if (oUserPrincipal == null || oGroupPrincipal == null)
+                if (oUserPrincipal != null && oGroupPrincipal != null)
                 {
                     if (IsUserGroupMember(sUserName, sGroupName))
                     {
@@ -334,7 +332,7 @@ namespace NetFrame.Common.Utils
             UserPrincipal oUserPrincipal = GetUser(sUserName);
             GroupPrincipal oGroupPrincipal = GetGroup(sGroupName);
 
-            if (oUserPrincipal == null || oGroupPrincipal == null)
+            if (oUserPrincipal != null && oGroupPrincipal != null)
             {
                 // ReSharper disable once PossibleNullReferenceException
                 // ReSharper disable once AssignNullToNotNullAttribute

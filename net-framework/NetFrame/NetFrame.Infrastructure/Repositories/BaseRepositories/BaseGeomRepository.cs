@@ -313,9 +313,9 @@ namespace NetFrame.Infrastructure.Repositories
                     AuditActionType = record.ActionType,
                     AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)
                 };
-                if (!string.IsNullOrEmpty(record.Changes))
+                if (record != null && !string.IsNullOrEmpty(record.Changes))
                 {
-                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record.Changes);
+                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record?.Changes);
                     change.Changes.AddRange(delta);
                 }
 

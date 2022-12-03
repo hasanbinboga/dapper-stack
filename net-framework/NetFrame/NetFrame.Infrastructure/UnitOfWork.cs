@@ -179,12 +179,10 @@ namespace NetFrame.Infrastructure
                     if (_transaction != null)
                     {
                         _transaction.Dispose();
-                        _transaction = null;
                     }
                     if (_connection != null)
                     {
                         _connection.Dispose();
-                        _connection = null;
                     }
                 }
                 _disposed = true;

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Net;
 using Dapper;
 using NpgsqlTypes;
 
@@ -18,9 +19,9 @@ namespace NetFrame.Infrasturcture.TypeWorks.TypeHandlers
 
         public override string Parse(object value)
         {
-            if (value is NpgsqlInet)
+            if (value is IPAddress)
             {
-                return ((NpgsqlInet)value).Address.ToString();
+                return ((IPAddress)value).ToString();
             }
             return value.ToString();
         }
