@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 using NetFrame.Common.Exception;
 using NetFrame.Core;
 using NetFrame.Core.Entities.Validators;
@@ -24,11 +22,11 @@ namespace NetFrame.Infrastructure.DataAcces
 
             UpdateValidator.RuleFor(s => s.UpdateUserName)
                         .Must(s => !string.IsNullOrEmpty(s) && s.Length <= 255)
-                        .WithMessage("UpdateUserName boş olamaz ve 255 karakterden az olmalıdır.");
+                        .WithMessage("UpdateUserName must not be empty and 255 is max length..");
             UpdateValidator.RuleFor(s => s.UpdateIpAddress)
                          .Must(s => !string.IsNullOrEmpty(s) && s.Length <= 25)
-                         .WithMessage("UpdateIpAddress boş olamaz ve 25 karakterden az olmalıdır.");
-            UpdateValidator.RuleFor(i => i.UpdateTime).NotEmpty().NotNull().WithMessage("UpdateTime boş geçilemez.");
+                         .WithMessage("UpdateIpAddress must not be empty and 25 is max length..");
+            UpdateValidator.RuleFor(i => i.UpdateTime).NotEmpty().NotNull().WithMessage("UpdateTime is required.");
         }
 
         public T GetEntityById(long id)
