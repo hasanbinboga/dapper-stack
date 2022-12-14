@@ -1,18 +1,20 @@
 ﻿using FluentValidation;
 using NetFrame.Common.Exception;
 using NetFrame.Core;
-using NetFrame.Core.Entities.Validators;
-using System;
-using System.Linq;
 
 
 namespace NetFrame.Infrastructure.DataAcces
 {
-    public abstract class EntityDataAccess<T> where T : Entity 
+    public abstract class EntityDataAccess<T> where T : Entity
     {
         public UnitOfWork UnitOfWork { get; }
 
         public AbstractValidator<T> Validator { get; }
+
+        protected EntityDataAccess(UnitOfWork unitOfWork)
+        {
+            UnitOfWork = unitOfWork;
+        }
 
         protected EntityDataAccess(UnitOfWork unitOfWork, AbstractValidator<T> validator)
         {
@@ -21,36 +23,51 @@ namespace NetFrame.Infrastructure.DataAcces
             Validator = validator;
         }
 
-     
+
 
         public T GetEntityById(long id)
         {
             return UnitOfWork.Repository<T>().GetById(id);
-        } 
+        }
 
         public void Update(T value)
         {
-            var validation = Validator.Validate(value);
-            if (validation.IsValid)
+            if (Validator != null)
             {
-                UnitOfWork.Repository<T>().Update(value);
+                var validation = Validator.Validate(value);
+                if (validation.IsValid)
+                {
+                    UnitOfWork.Repository<T>().Update(value);
+                }
+                else
+                {
+                    throw new ValidationCoreException(validation.Errors.ToString());
+                }
             }
             else
             {
-                throw new ValidationCoreException(validation.Errors.ToString());
+                UnitOfWork.Repository<T>().Update(value);
+
             }
         }
 
         public long Add(T value)
         {
-            var validation = Validator.Validate(value);
-            if (validation.IsValid)
+            if (Validator != null)
             {
-                return UnitOfWork.Repository<T>().Add(value);
+                var validation = Validator.Validate(value);
+                if (validation.IsValid)
+                {
+                    return UnitOfWork.Repository<T>().Add(value);
+                }
+                else
+                {
+                    throw new ValidationCoreException(validation.Errors.ToString());
+                }
             }
             else
             {
-                throw new ValidationCoreException(validation.Errors.ToString());
+                return UnitOfWork.Repository<T>().Add(value);
             }
         }
 
