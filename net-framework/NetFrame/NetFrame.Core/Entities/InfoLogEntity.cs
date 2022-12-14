@@ -3,11 +3,19 @@
 namespace NetFrame.Core.Entities
 {
     /// <summary>
-    /// Log bilgilerini içeren sınıf
+    /// Log Class
     /// </summary>
     [Table("infolog")]
     public class InfoLogEntity:LogEntity
     {
         
+    }
+
+    public class InfoLogEntityValidator : LogEntityValidator<InfoLogEntity>
+    {
+        public InfoLogEntityValidator()
+        {
+             
+        }
     }
 }
