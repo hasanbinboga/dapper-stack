@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using Npgsql;
-using NetFrame.Common.Exception;
+﻿using NetFrame.Common.Exception;
 using NetFrame.Core;
 using NetFrame.Infrastructure.Repositories;
+using Npgsql;
+using System.Data;
+using System.Data.Common;
 
 namespace NetFrame.Infrastructure
 {
@@ -28,23 +27,23 @@ namespace NetFrame.Infrastructure
 
         private bool _disposed;
 
-        private IDbConnection _connection;
+        private DbConnection _connection;
 
         /// <summary>
         /// database connection
         /// </summary>
-        public IDbConnection Connection
+        public DbConnection Connection
         {
             get { return _connection; }
             private set { _connection = value; }
         }
 
-        private IDbTransaction _transaction;
+        private DbTransaction _transaction;
 
         /// <summary>
         /// database transaction
         /// </summary>
-        public IDbTransaction Transaction
+        public DbTransaction Transaction
         {
             get { return _transaction; }
             private set { _transaction = value; }
@@ -67,7 +66,7 @@ namespace NetFrame.Infrastructure
         /// <param name="connection">Db Connection</param>
         /// <param name="isolationLevel">Data access isolation level</param>
         /// <exception cref="DataAccessException">This exception is thrown in case of an error in data access.</exception>
-        public UnitOfWork(IDbConnection connection, IsolationLevel isolationLevel = IsolationLevel.Unspecified)
+        public UnitOfWork(DbConnection connection, IsolationLevel isolationLevel = IsolationLevel.Unspecified)
         {
             _connection = connection;
             _isolationLevel = isolationLevel;
@@ -80,8 +79,8 @@ namespace NetFrame.Infrastructure
             }
             catch (Exception ex)
             {
-                throw new DataAccessException("Veri tabanı bağlantısında hata oluştu.",
-                    new BaseException("Veri tabanı bağlantısında hata oluştu.", ex));
+                throw new DataAccessException("An error occurred in the database connection.",
+                    new BaseException("An error occurred in the database connection.", ex));
             }
         }
 
@@ -119,58 +118,53 @@ namespace NetFrame.Infrastructure
         /// The method used to save changes made within the transaction in the database.
         /// </summary>
         /// <returns></returns>
-        public bool Commit()
+        public async Task<bool> Commit()
         {
             try
             {
-                _transaction.Commit();
+                await _transaction.DisposeAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                _transaction.Rollback();
-                throw new DataAccessException("Veri tabanında işlemler kaydedilirken hata oluştu", new BaseException("", ex));
+                await _transaction.RollbackAsync();
+                throw new DataAccessException("Error occurred while saving transactions in database", new BaseException("", ex));
                 //return false;
                 //throw;
             }
             finally
             {
-                Reset();
+               await Reset();
             }
         }
+
+      
+
 
 
 
         /// <summary>
         /// A method that undoes the changes made in that transaction in the database in case of any error.
         /// </summary>
-        public void Rollback()
+        public async Task Rollback()
         {
-            _transaction.Rollback();
-
-            Reset();
+            await _transaction.RollbackAsync();
+             await Reset();
         }
 
         /// <summary>
         ///Creates a new process by terminating the current process.
         /// </summary>
-        public void Reset()
+        public async Task Reset()
         {
-            _transaction.Dispose();
-            _transaction = _connection.BeginTransaction();
+            await _transaction.DisposeAsync();
+            _transaction = await _connection.BeginTransactionAsync();
         }
 
 
-        /// <summary>
-        /// free ram
-        /// </summary>
-        public virtual void Dispose()
-        {
-            RealDispose(true);
-            GC.SuppressFinalize(this);
-        }
+        
 
-        void RealDispose(bool disposing)
+        async Task RealDispose(bool disposing)
         {
             if (!_disposed)
             {
@@ -178,11 +172,11 @@ namespace NetFrame.Infrastructure
                 {
                     if (_transaction != null)
                     {
-                        _transaction.Dispose();
+                        await _transaction.DisposeAsync();
                     }
                     if (_connection != null)
                     {
-                        _connection.Dispose();
+                        await _connection.DisposeAsync();
                     }
                 }
                 _disposed = true;
@@ -191,7 +185,7 @@ namespace NetFrame.Infrastructure
 
         ~UnitOfWork()
         {
-            RealDispose(false);
+            Task.Run(async ()=> await RealDispose(false));
         }
 
         /// <summary>
@@ -213,6 +207,14 @@ namespace NetFrame.Infrastructure
             }
         }
 
-
+        
+        /// <summary>
+        /// free ram
+        /// </summary>
+        public async ValueTask DisposeAsync()
+        {
+            await RealDispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

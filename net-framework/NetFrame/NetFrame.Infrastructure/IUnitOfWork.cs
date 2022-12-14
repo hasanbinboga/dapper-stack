@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Data;
+using System.Data.Common;
 
 namespace NetFrame.Infrastructure
 {
@@ -9,16 +9,16 @@ namespace NetFrame.Infrastructure
     /// gerçekleştirme ve hafızada tutma işlemlerini sunmaktadır. 
     /// Bu sayede işlemlerin toplu halde gerçekleştirilmesi ve hata durumunda geri alınabilmesi sağlamaktadır.
     /// </summary>
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IAsyncDisposable
     {
         /// <summary>
         /// Veri tabanı bağlantısı
         /// </summary>
-        IDbConnection Connection { get; }
+        DbConnection Connection { get; }
         /// <summary>
         /// Veri tabanı işlemi 
         /// </summary>
-        IDbTransaction Transaction { get; }
+        DbTransaction Transaction { get; }
         /// <summary>
         /// Veri tabanı işlemi izolasyon seviyesi
         /// </summary>
@@ -28,11 +28,11 @@ namespace NetFrame.Infrastructure
         /// Veri tabanında işlem içerisinde yapılan değişiklikleri kaydetmek için kullanılan metot.
         /// </summary>
         /// <returns></returns>
-        bool Commit();
+        Task<bool> Commit();
         /// <summary>
         /// Herhangi bir hata durumunda veri tabanında o işlem içerisinde yapılan değişiklikleri geri alan metot.
         /// </summary>
-        void Rollback();
+        Task Rollback();
 
 
         /// <summary>
