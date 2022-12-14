@@ -1,45 +1,64 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using FluentValidation;
+using NetFrame.Core.Entities.Validators;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace NetFrame.Core.Entities
 {
     /// <summary>
-    /// Görev bilgilerini içeren sınıf.
+    /// Task entity class.
     /// </summary>
     [Table("tasks")]
     public class TaskEntity : BaseEntity
     {
         /// <summary>
-        /// Görev başlık bilgisi
+        /// Title of task
         /// </summary> 
         [Column("title")]
         public string Title { get; set; }
 
         /// <summary>
-        /// Görev açıklama bilgisi
+        /// Description about task
         /// </summary> 
         [Column("taskdescription")]
         public string TaskDescription { get; set; }
         /// <summary>
-        /// Görev atayan kullanıcı id bilgisi
+        /// id of assigned user
         /// </summary>
         [Column("assigneduserid")]
         public long AssignerUserId { get; set; }
         /// <summary>
-        /// Görev atanan kullanıcı id bilgisi
+        /// Id of assignee user
         /// </summary>
         [Column("assigneeuserid")]
         public long AssigneeUserId { get; set; }
         /// <summary>
-        /// Görev durum bilgisi
+        /// Task status
         /// </summary>
         [Column("taskstatus")]
         public TaskStatus TaskStatus { get; set; }
         
         /// <summary>
-        /// Görevin olayları
+        /// Task actions
         /// </summary>
         public List<TaskActionEntity> TaskActions { get; set; }
 
+    }
+
+
+    public class TaskEntityValidator : BaseEntityValidator<TaskEntity>
+    {
+        public TaskEntityValidator()
+        {
+            RuleFor(s => s.Title)
+                        .Must(s => !string.IsNullOrEmpty(s) && s.Length < 2000)
+                        .WithMessage("Title cannot be empty and 2000 must be less than one character.");
+            RuleFor(s => s.TaskDescription)
+                      .Must(s => !string.IsNullOrEmpty(s) && s.Length < 2000)
+                      .WithMessage("TaskDescription cannot be empty and 2000 must be less than one character.");
+            RuleFor(s => s.AssignerUserId).NotNull();
+
+            RuleFor(s => s.TaskStatus).IsInEnum();
+        }
     }
 }
