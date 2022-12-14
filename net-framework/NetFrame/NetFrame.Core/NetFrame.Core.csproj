@@ -11,7 +11,7 @@
     <PackageReference Include="FluentValidation" Version="11.3.0" />
     <PackageReference Include="NetTopologySuite.Core" Version="1.15.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="PagedList" Version="1.17.0" />
+    <PackageReference Include="X.PagedList" Version="8.4.3" />
   </ItemGroup>
 
 </Project>

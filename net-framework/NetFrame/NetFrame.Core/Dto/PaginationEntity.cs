@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using PagedList;
+using X.PagedList;
 
 namespace NetFrame.Core.Dtos
 {

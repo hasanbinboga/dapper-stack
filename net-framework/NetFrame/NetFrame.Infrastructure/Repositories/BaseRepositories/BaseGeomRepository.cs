@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 using NetFrame.Common.Utils;
 using NetFrame.Core;
 using NetFrame.Core.Entities;
-using PagedList;
+using X.PagedList;
+
 
 namespace NetFrame.Infrastructure.Repositories
 {

@@ -3,7 +3,7 @@ using NetFrame.Common.Utils;
 using NetFrame.Core;
 using NetFrame.Core.Entities;
 using Newtonsoft.Json;
-using PagedList;
+using X.PagedList;
 
 namespace NetFrame.Infrastructure.Repositories
 {

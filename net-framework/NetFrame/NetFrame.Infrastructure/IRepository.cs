@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NetFrame.Core;
-using PagedList;
+using X.PagedList;
 
 namespace NetFrame.Infrastructure
 {
