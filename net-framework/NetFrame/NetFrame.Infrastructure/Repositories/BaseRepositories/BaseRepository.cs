@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using NetFrame.Common.Utils;
 using NetFrame.Core;
 using NetFrame.Core.Entities;
-using NetFrame.Infrastructure.Repositories;
 using X.PagedList;
 
 namespace NetFrame.Infrastructure.Repositories
@@ -25,12 +24,6 @@ namespace NetFrame.Infrastructure.Repositories
         {
             UnitOfWork = unitOfWork;
         }
-
-        public BaseRepository()
-        {
-        }
-
-
 
         /// <summary>
         /// Provides the registration of the listed entities to the database

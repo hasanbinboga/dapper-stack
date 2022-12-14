@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using NetFrame.Common.Exception;
 using NetFrame.Core.Entities;
 
 namespace NetFrame.Infrastructure.Repositories
@@ -65,8 +66,8 @@ namespace NetFrame.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                return -1;
-                throw ex;
+                throw new DataAccessException("insert error:", ex);
+
             }
         }
 
@@ -88,7 +89,7 @@ namespace NetFrame.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new DataAccessException("Update error:", ex);
             }
         }
 

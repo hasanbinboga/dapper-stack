@@ -27,7 +27,7 @@ namespace NetFrame.Common.Utils.Search
                 return null;
 
             ParameterExpression param = Expression.Parameter(typeof(T), "t");
-            Expression exp = null;
+            Expression? exp = null;
              
             if (filters.Count == 1)
                 exp = GetExpression<T>(param, filters[0]);

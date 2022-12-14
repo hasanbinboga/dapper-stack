@@ -8,28 +8,17 @@ using System.Linq;
 
 namespace NetFrame.Infrastructure.DataAcces
 {
-    public abstract class BaseDataAccess<T> where T : BaseEntity 
+    public abstract class EntityDataAccess<T> where T : Entity 
     {
         public UnitOfWork UnitOfWork { get; }
 
-        public BaseEntityValidator<T> Validator { get; }
-        public BaseEntityValidator<T> UpdateValidator { get; }
+        public AbstractValidator<T> Validator { get; }
 
-        protected BaseDataAccess(UnitOfWork unitOfWork)
+        protected EntityDataAccess(UnitOfWork unitOfWork, AbstractValidator<T> validator)
         {
-            UnitOfWork = unitOfWork; 
+            UnitOfWork = unitOfWork;
 
-            Validator = new BaseEntityValidator<T>();
-            UpdateValidator = new BaseEntityValidator<T>();
-
-
-            UpdateValidator.RuleFor(s => s.UpdateUserName)
-                        .Must(s => !string.IsNullOrEmpty(s) && s.Length <= 255)
-                        .WithMessage("UpdateUserName must not be empty and 255 is max length.");
-            UpdateValidator.RuleFor(s => s.UpdateIpAddress)
-                         .Must(s => !string.IsNullOrEmpty(s) && s.Length <= 25)
-                         .WithMessage("UpdateIpAddress must not be empty and 25 is max length.");
-            UpdateValidator.RuleFor(i => i.UpdateTime).NotEmpty().NotNull().WithMessage("UpdateTime is required.");
+            Validator = validator;
         }
 
      
@@ -41,7 +30,7 @@ namespace NetFrame.Infrastructure.DataAcces
 
         public void Update(T value)
         {
-            var validation = UpdateValidator.Validate(value);
+            var validation = Validator.Validate(value);
             if (validation.IsValid)
             {
                 UnitOfWork.Repository<T>().Update(value);
@@ -69,7 +58,7 @@ namespace NetFrame.Infrastructure.DataAcces
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(ipAddress))
             {
-                throw new ValidationCoreException("userName ve ipAdress boş olamaz.");
+                throw new ValidationCoreException("userName and ipAdress couldn't be null or empty.");
             }
 
             UnitOfWork.Repository<T>().Passive(id, userName, DateTime.Now, ipAddress);
@@ -78,7 +67,7 @@ namespace NetFrame.Infrastructure.DataAcces
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(ipAddress))
             {
-                throw new ValidationCoreException("userName ve ipAdress boş olamaz.");
+                throw new ValidationCoreException("userName and ipAdress couldn't be null or empty.");
             }
 
             UnitOfWork.Repository<T>().Passive(idArray.ToList(), userName, DateTime.Now, ipAddress);

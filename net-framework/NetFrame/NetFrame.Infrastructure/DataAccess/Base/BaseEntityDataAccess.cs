@@ -2,37 +2,42 @@
 using NetFrame.Common.Exception;
 using NetFrame.Core;
 using NetFrame.Core.Entities.Validators;
+using System;
+using System.Linq;
+
 
 namespace NetFrame.Infrastructure.DataAcces
 {
-    public abstract class BaseGeomDataAccess<T> where T : BaseGeomEntity
+    public abstract class BaseEntityDataAccess<T> where T : BaseEntity 
     {
         public UnitOfWork UnitOfWork { get; }
 
-        public BaseGeomEntityValidator<T> Validator { get; }
-        public BaseGeomEntityValidator<T> UpdateValidator { get; }
+        public BaseEntityValidator<T> Validator { get; }
+        public BaseEntityValidator<T> UpdateValidator { get; }
 
-        protected BaseGeomDataAccess(UnitOfWork unitOfWork)
+        protected BaseEntityDataAccess(UnitOfWork unitOfWork)
         {
-            UnitOfWork = unitOfWork;
+            UnitOfWork = unitOfWork; 
 
-            Validator = new BaseGeomEntityValidator<T>();
-            UpdateValidator = new BaseGeomEntityValidator<T>();
+            Validator = new BaseEntityValidator<T>();
+            UpdateValidator = new BaseEntityValidator<T>();
 
 
             UpdateValidator.RuleFor(s => s.UpdateUserName)
                         .Must(s => !string.IsNullOrEmpty(s) && s.Length <= 255)
-                        .WithMessage("UpdateUserName must not be empty and 255 is max length..");
+                        .WithMessage("UpdateUserName must not be empty and 255 is max length.");
             UpdateValidator.RuleFor(s => s.UpdateIpAddress)
                          .Must(s => !string.IsNullOrEmpty(s) && s.Length <= 25)
-                         .WithMessage("UpdateIpAddress must not be empty and 25 is max length..");
+                         .WithMessage("UpdateIpAddress must not be empty and 25 is max length.");
             UpdateValidator.RuleFor(i => i.UpdateTime).NotEmpty().NotNull().WithMessage("UpdateTime is required.");
         }
+
+     
 
         public T GetEntityById(long id)
         {
             return UnitOfWork.Repository<T>().GetById(id);
-        }
+        } 
 
         public void Update(T value)
         {
@@ -52,7 +57,7 @@ namespace NetFrame.Infrastructure.DataAcces
             var validation = Validator.Validate(value);
             if (validation.IsValid)
             {
-               return  UnitOfWork.Repository<T>().Add(value);
+                return UnitOfWork.Repository<T>().Add(value);
             }
             else
             {

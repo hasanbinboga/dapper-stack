@@ -29,7 +29,7 @@ namespace NetFrame.Common.Exception
         /// </summary>
         /// <param name="message">DataAccess projesi Exception mesaj bilgisi</param>
         /// <param name="exception">DataAccess projesi Exception bilgisi</param>
-        public DataAccessException(string message, BaseException exception) : base(message, exception)
+        public DataAccessException(string message, System.Exception exception) : base(message, exception)
         {
             PersistException(this);
         }
