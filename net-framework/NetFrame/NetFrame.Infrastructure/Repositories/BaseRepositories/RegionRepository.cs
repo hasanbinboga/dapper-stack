@@ -9,17 +9,17 @@ namespace NetFrame.Infrastructure.Repositories
         {
         }
 
-        public override long Add(RegionEntity entity)
+        public override async Task<long>Add(RegionEntity entity)
         {
             return 0;
         }
 
-        public override List<long> Add(IEnumerable<RegionEntity> entities)
+        public override async Task<List<long>> Add(IEnumerable<RegionEntity> entities)
         {
             return null;
         }
 
-        public override void Update(RegionEntity entity)
+        public override async Task Update(RegionEntity entity)
         {
         } 
        

@@ -25,12 +25,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public override List<long> Add(IEnumerable<AuditEntity> entities)
+        public override async Task<List<long>> Add(IEnumerable<AuditEntity> entities)
         {
             var rslt = new List<long>();
             foreach (var item in entities)
             {
-                rslt.Add(Add(item));
+                rslt.Add(await Add(item));
             }
             return rslt;
         }
@@ -39,7 +39,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public override long Add(AuditEntity entity)
+        public override async Task<long> Add(AuditEntity entity)
         {
 
             if (entity == null)
@@ -50,7 +50,7 @@ namespace NetFrame.Infrastructure.Repositories
 
             try
             {
-                entity.Id = UnitOfWork.Connection.ExecuteScalar<long>(
+                entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
                     "insert into audit(id, keyfieldid, datamodel, valuebefore, valueafter, changes, actiontype, createtime, createipaddress, createusername, transactionid, applicationname) values(DEFAULT, @KeyFieldId, @DataModel, @ValueBefore::jsonb, @ValueAfter::jsonb, @Changes::jsonb, @ActionType, @CreateTime, @CreateIpAddress::inet, @CreateUserName, @TransactionId, @ApplicationName) returning id;",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
@@ -68,14 +68,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// Allows the specified entity to be updated in the database.
         /// </summary>
         /// <param name="entity">Updated version of the data requested to be updated in the database </param>
-        public override void Update(AuditEntity entity)
+        public override async Task Update(AuditEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
             try
             {
-                UnitOfWork.Connection.Execute(
+                await UnitOfWork.Connection.ExecuteAsync(
                     "UPDATE audit SET keyfieldid = @KeyFieldId, datamodel = @DataModel, valuebefore = @ValueBefore::jsonb, valueafter = @ValueAfter::jsonb, changes = @Changes::jsonb, actiontype= @ActionType, transactionid = @TransactionId, applicationname = @ApplicationName where Id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
@@ -93,12 +93,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="id">id value of related data in database</param>
         /// <param name="entityType">Entity type</param>
         /// <returns>If there is a data history related to the requested data, it returns a list of changes made. Otherwise, an empty list is returned. </returns>
-        public List<AuditChange> GetAudit(long id, Type entityType)
+        public async Task<List<AuditChange>> GetAudit(long id, Type entityType)
         {
             List<AuditChange> rslt = new List<AuditChange>();
             IRepository<AuditEntity> repository = new Repository<AuditEntity>(UnitOfWork);
 
-            var auditTrail = repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = entityType.FullName }, "createdate");
+            var auditTrail = await repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = entityType.FullName }, "createdate");
 
             // we are looking for audit-history of the record selected.
 

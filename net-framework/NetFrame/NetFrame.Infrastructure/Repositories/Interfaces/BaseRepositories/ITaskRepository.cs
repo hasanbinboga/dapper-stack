@@ -8,7 +8,7 @@ namespace NetFrame.Infrastructure.Repositories
     /// </summary>
     public interface ITaskRepository : IBaseRepository<TaskEntity>
     {
-        TaskEntity GetTaskDetails(long id);
+        Task<TaskEntity> GetTaskDetails(long id);
     }
 
    

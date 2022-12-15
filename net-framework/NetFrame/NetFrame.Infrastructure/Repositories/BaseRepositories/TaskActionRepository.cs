@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using NetFrame.Core.Entities;
+using X.PagedList;
 
 namespace NetFrame.Infrastructure.Repositories
 {
@@ -18,12 +19,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public override List<long> Add(IEnumerable<TaskActionEntity> entities)
+        public override async Task<List<long>> Add(IEnumerable<TaskActionEntity> entities)
         {
             var rslt = new List<long>();
             foreach (var item in entities)
             {
-                rslt.Add(Add(item));
+                rslt.Add(await Add(item));
             }
             return rslt;
         }
@@ -32,7 +33,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public override long Add(TaskActionEntity entity)
+        public override async Task<long> Add(TaskActionEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
@@ -42,7 +43,7 @@ namespace NetFrame.Infrastructure.Repositories
 
             try
             {
-                entity.Id = UnitOfWork.Connection.ExecuteScalar<long>(
+                entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
                     "INSERT INTO taskactions(id, taskref, actiontime, actiondescription, previousstatus, newstatus, createtime, createusername, createipaddress) values(DEFAULT, @TaskRef, @ActionTime, @ActionDescription, @PreviousStatus, @NewStatus, @CreateTime, @CreateUserName, @CreateIpAddress::inet) RETURNING id;",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
@@ -60,14 +61,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// Allows the specified entity to be updated in the database.
         /// </summary>
         /// <param name="entity">Updated version of the data requested to be updated in the database </param>
-        public override void Update(TaskActionEntity entity)
+        public override async Task Update(TaskActionEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
 
             try
             {
-                UnitOfWork.Connection.Execute(
+                await UnitOfWork.Connection.ExecuteAsync(
                     "update taskactions set taskref = @TaskRef, actiontime = @ActionTime, actiondescription = @ActionDescription, previousstatus = @PreviousStatus, newstatus = @NewStatus, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  where Id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
@@ -78,11 +79,11 @@ namespace NetFrame.Infrastructure.Repositories
             }
         }
 
-        public List<TaskActionEntity> GetAllByTaskId(long taskId)
+        public async Task<List<TaskActionEntity>> GetAllByTaskId(long taskId)
         {
             var criteria = "taskref = @TaskId";
             var order = "id";
-            return GetMany(criteria, new {TaskId = taskId}, order).ToList();
+            return await (await GetMany(criteria, new {TaskId = taskId}, order)).ToListAsync();
         }
     }
 }

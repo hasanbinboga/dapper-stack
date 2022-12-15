@@ -5,46 +5,46 @@ using System.Data.Common;
 namespace NetFrame.Infrastructure
 {
     /// <summary>
-    /// Veritabanı ile yapılacak olan tüm işlemleri, tek bir kanal aracılığı ile 
-    /// gerçekleştirme ve hafızada tutma işlemlerini sunmaktadır. 
-    /// Bu sayede işlemlerin toplu halde gerçekleştirilmesi ve hata durumunda geri alınabilmesi sağlamaktadır.
+    /// It offers to perform all transactions to be made with the database through a single channel and 
+    /// to keep them in memory. In this way, it ensures that the transactions are performed in batches and 
+    /// that they can be retrieved in case of error.
     /// </summary>
     public interface IUnitOfWork : IAsyncDisposable
     {
         /// <summary>
-        /// Veri tabanı bağlantısı
+        /// Database connection
         /// </summary>
         DbConnection Connection { get; }
         /// <summary>
-        /// Veri tabanı işlemi 
+        /// Database transaction
         /// </summary>
         DbTransaction Transaction { get; }
         /// <summary>
-        /// Veri tabanı işlemi izolasyon seviyesi
+        /// Database isolation level
         /// </summary>
         IsolationLevel IsolationLevel { get; }
 
         /// <summary>
-        /// Veri tabanında işlem içerisinde yapılan değişiklikleri kaydetmek için kullanılan metot.
+        /// The method used to save changes made within the transaction in the database.
         /// </summary>
         /// <returns></returns>
         Task<bool> Commit();
         /// <summary>
-        /// Herhangi bir hata durumunda veri tabanında o işlem içerisinde yapılan değişiklikleri geri alan metot.
+        /// A method that undoes the changes made in that transaction in the database in case of any error.
         /// </summary>
         Task Rollback();
 
 
         /// <summary>
-        /// UnitOfWork üzerinde entity e özel repository register işlemlerini yönetir.
+        /// Manages entity-specific repository register operations on UnitOfWork.
         /// </summary>
-        /// <typeparam name="T"> entity türü. ör: Message </typeparam>
-        /// <param name="repository">Custom olarak tanımlanmış  repository nin tür bilgisi. Ugadan Ör: MessageRepository </param>
+        /// <typeparam name="T"> Entity Class. Etc: Message </typeparam>
+        /// <param name="repository">The type information of the repository defined as Custom. Ex: MessageRepository </param>
         void RegisterRepository<T>(Type repository) where T : class, new();
 
 
         /// <summary>
-        /// Uygulama ile ilişkili tüm veri kümeleri
+        /// All datasets associated with the application
         /// </summary>
         Dictionary<Type, dynamic> Repositories { get; set; }
 

@@ -23,12 +23,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public override List<long> Add(IEnumerable<InfoLogEntity> entities)
+        public override async Task<List<long>> Add(IEnumerable<InfoLogEntity> entities)
         {
             var rslt = new List<long>();
             foreach (var item in entities)
             {
-                rslt.Add(Add(item));
+                rslt.Add(await Add(item));
             }
             return rslt;
         }
@@ -37,7 +37,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity info</param>
-        public override long Add(InfoLogEntity entity)
+        public override async Task<long> Add(InfoLogEntity entity)
         {
 
             if (entity == null)
@@ -48,7 +48,7 @@ namespace NetFrame.Infrastructure.Repositories
 
             try
             {
-                entity.Id = UnitOfWork.Connection.ExecuteScalar<long>(
+                entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
                     "INSERT INTO infolog(id, serviceuri, controller, method, requesturi, requestjsonobject, requestxmlobject, statuscode, responsejsonobject, responsexmlobject, username, useripaddress) VALUES (DEFAULT, @ServiceUri, @Controller, @Method, @RequestUri, @RequestJsonObject::jsonb, @RequestXmlObject::xml, @StatusCode, @ResponseJsonObject::jsonb, @ResponseXmlObject::xml, @UserName, @UserIpAddress::inet) RETURNING id;",
                     param: entity,
                     transaction: UnitOfWork.Transaction);

@@ -20,12 +20,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public override List<long> Add(IEnumerable<NotificationEntity> entities)
+        public override async Task<List<long>> Add(IEnumerable<NotificationEntity> entities)
         {
             var rslt = new List<long>();
             foreach (var item in entities)
             {
-                rslt.Add(Add(item));
+                rslt.Add(await Add(item));
             }
             return rslt;
         }
@@ -34,7 +34,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public override long Add(NotificationEntity entity)
+        public override async Task<long>Add(NotificationEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
@@ -44,7 +44,7 @@ namespace NetFrame.Infrastructure.Repositories
 
             try
             {
-                entity.Id = UnitOfWork.Connection.ExecuteScalar<long>(
+                entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
                     "INSERT INTO notifications(id, title, body, receiverusername, receiveruserfullname, sendtime, senderusername, senderuserfullname, readstatus, createtime, createusername, createipaddress) values(DEFAULT, @Title, @Body, @ReceiverUserName, @ReceiverUserFullname, @SendTime, @SenderUserName, @SenderUserFullname, @ReadStatus,  @CreateTime, @CreateUserName, @CreateIpAddress::inet) RETURNING id;",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
@@ -62,14 +62,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// Allows the specified entity to be updated in the database.
         /// </summary>
         /// <param name="entity">Updated version of the data requested to be updated in the database </param>
-        public override void Update(NotificationEntity entity)
+        public override async Task Update(NotificationEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
 
             try
             {
-                UnitOfWork.Connection.Execute(
+                await UnitOfWork.Connection.ExecuteAsync(
                     "update notifications set title = @Title, body = @Body, receiverusername = @ReceiverUserName, receiveruserfullname = @ReceiverUserFullname, sendtime = @SendTime, senderusername = @SenderUserName, senderuserfullname = @SenderUserFullname, readstatus = @ReadStatus,  updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  where Id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);

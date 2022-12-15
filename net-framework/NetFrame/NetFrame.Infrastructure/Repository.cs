@@ -11,7 +11,7 @@ namespace NetFrame.Infrastructure.Repositories
     /// Public repository interface class implementation for data with no private repository defined. Provides basic CRUD operations
     /// </summary>
     /// <typeparam name="T"> Entity türü </typeparam>
-    public class Repository<T> : IRepository<T> where T :  Entity
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         protected readonly IUnitOfWork UnitOfWork;
 
@@ -31,7 +31,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public virtual List<long> Add(IEnumerable<T> entities)
+        public virtual async Task<List<long>> Add(IEnumerable<T> entities)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -41,7 +41,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual long Add(T entity)
+        public virtual async Task<long> Add(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -51,7 +51,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Allows the specified entity to be updated in the database.
         /// </summary>
         /// <param name="entity"Updated version of the data requested to be updated in the database </param>
-        public virtual void Update(T entity)
+        public virtual async Task Update(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -61,19 +61,19 @@ namespace NetFrame.Infrastructure.Repositories
         /// It performs the operations of deleting the entities whose list is given from the database.
         /// </summary>
         /// <param name="entities">Entity list to be deleted from database</param>
-        public virtual void Delete(IEnumerable<T> entities)
+        public virtual async Task Delete(IEnumerable<T> entities)
         {
             var ids = entities.Cast<Entity>().Select(e => e.Id).ToArray();
-            Delete(ids);
+            await Delete(ids);
         }
 
         /// <summary>
         /// It performs the operations of deleting the entities whose id list is given from the database.
         /// </summary>
         /// <param name="idList">Id list of entities to be deleted from database</param>
-        public virtual void Delete(IList<long> idList)
+        public virtual async Task Delete(IList<long> idList)
         {
-            UnitOfWork.Connection.Execute(
+            await UnitOfWork.Connection.ExecuteAsync(
                 $"delete from {DataAnnotationHelper.GetTableName<T>()} where id = ANY(@Ids)",
                 param: new { Ids = idList },
                 transaction: UnitOfWork.Transaction);
@@ -85,9 +85,9 @@ namespace NetFrame.Infrastructure.Repositories
         /// It performs the operations of deleting the entity with the given id from the database.
         /// </summary>
         /// <param name="id">Entity id information</param>
-        public virtual void Delete(long id)
+        public virtual async Task Delete(long id)
         {
-            UnitOfWork.Connection.Execute(
+            await UnitOfWork.Connection.ExecuteAsync(
                 $"delete from {DataAnnotationHelper.GetTableName<T>()} where Id = @Id",
                 param: new { Id = id },
                 transaction: UnitOfWork.Transaction);
@@ -97,9 +97,9 @@ namespace NetFrame.Infrastructure.Repositories
         /// It performs the operations of deleting the given entity from the database.
         /// </summary>
         /// <param name="entity">Entity information to be deleted</param>
-        public virtual void Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
-            Delete(entity.Id);
+            await Delete(entity.Id);
         }
 
         /// <summary>
@@ -109,11 +109,11 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">user name</param>
         /// <param name="updateTime">passive time</param>
         /// <param name="ipAddress">user ip address</param>
-        public virtual void Passive(long id, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(long id, string userName, DateTime? updateTime, string ipAddress)
         {
-            UnitOfWork.Connection.Execute(
+            await UnitOfWork.Connection.ExecuteAsync(
                 $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET where id = @Id",
-                param: new { Deleted = true, Id = id,  UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
+                param: new { Deleted = true, Id = id, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
                 transaction: UnitOfWork.Transaction);
         }
 
@@ -124,9 +124,9 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">user name</param>
         /// <param name="updateTime">passive time</param>
         /// <param name="ipAddress">user ip address</param>
-        public virtual void Passive(T entity, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(T entity, string userName, DateTime? updateTime, string ipAddress)
         {
-            Passive(entity.Id, userName, updateTime, ipAddress);
+            await Passive(entity.Id, userName, updateTime, ipAddress);
         }
 
         /// <summary>
@@ -136,10 +136,10 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">user name</param>
         /// <param name="updateTime">passive time</param>
         /// <param name="ipAddress">user ip address</param>
-        public virtual void Passive(IEnumerable<T> entityList, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(IEnumerable<T> entityList, string userName, DateTime? updateTime, string ipAddress)
         {
             var ids = entityList.Cast<Entity>().Select(e => e.Id).ToList();
-            Passive(ids, userName, updateTime, ipAddress);
+            await Passive(ids, userName, updateTime, ipAddress);
         }
 
         /// <summary>
@@ -149,9 +149,9 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">user name</param>
         /// <param name="updateTime">passive time</param>
         /// <param name="ipAddress">user ip address</param>
-        public void Passive(List<long> idList, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(List<long> idList, string userName, DateTime? updateTime, string ipAddress)
         {
-            UnitOfWork.Connection.Execute(
+            await UnitOfWork.Connection.ExecuteAsync(
                      $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET WHERE id = ANY(@Ids)",
                      param: new { Deleted = true, Ids = idList, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
                      transaction: UnitOfWork.Transaction);
@@ -164,12 +164,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="order">Fields to be sorted are specified here
         /// </param>
         /// <returns>Related Entity list registered in database</returns>
-        public virtual IEnumerable<T> GetAll(string order = "")
+        public virtual async Task<IEnumerable<T>> GetAll(string order = "")
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order}")
-               .ToList();
+
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
+               $"select * from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order}");
+
+            return await res.ToListAsync();
         }
 
         /// <summary>
@@ -179,12 +181,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="page">Page info</param>
         /// <param name="order">Fields to be sorted are specified here</param>
         /// <returns>Related Entity list registered in database</returns>
-        public IPagedList<T> GetAll(Page page, string order = "")
+        public async Task<IPagedList<T>> GetAll(Page page, string order = "")
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
                $"select * from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order} limit {page.PageSize} offset {page.Skip}",
-               transaction: UnitOfWork.Transaction).ToPagedList(1, page.PageSize);
+               transaction: UnitOfWork.Transaction);
+
+            return await res.ToPagedListAsync(1, page.PageSize);
         }
 
 
@@ -194,13 +198,13 @@ namespace NetFrame.Infrastructure.Repositories
         /// </summary>
         /// <param name="id">Entity id</param>
         /// <returns>entity object</returns>
-        public virtual T GetById(long id)
+        public virtual async Task<T> GetById(long id)
         {
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<T>(
                  $"select * from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false AND Id = @Id",
                  param: new { Id = id },
-                 transaction: UnitOfWork.Transaction)
-                 .FirstOrDefault();
+                 transaction: UnitOfWork.Transaction);
+            return res;
         }
 
 
@@ -208,11 +212,13 @@ namespace NetFrame.Infrastructure.Repositories
         /// Returns the total number of active records in the database.
         /// </summary>
         /// <returns></returns>
-        public virtual int Count()
+        public virtual async  Task<int> Count()
         {
-            return UnitOfWork.Connection.ExecuteScalar<int>(
+            var res = await UnitOfWork.Connection.ExecuteScalarAsync<int>(
                 $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false",
                 transaction: UnitOfWork.Transaction);
+
+            return res;
         }
 
 
@@ -222,13 +228,15 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="criteria"> It returns records that match the criteria and given parameters in the where statement. </param>
         /// <param name="parameters">Parameters in the criteria text. Must be the same as the Parameter names in the criteria.</param>
         /// <returns></returns>
-        public virtual int Count(string criteria, object parameters)
+        public virtual async Task<int> Count(string criteria, object parameters)
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
-            return UnitOfWork.Connection.ExecuteScalar<int>(
+            var res = await UnitOfWork.Connection.ExecuteScalarAsync<int>(
                 $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
+
+            return res;
         }
 
 
@@ -237,11 +245,11 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="parameters">Parameters in the criteria statement. Must be the same as the Parameter names in the Criteria statement.</param>
         /// <param name="order">Fields to be sorted are specified here </param>
         /// <returns>Related Entity list registered in database</returns>
-        public virtual IEnumerable<T> GetMany(string criteria, object parameters, string order = "")
+        public virtual async Task<IEnumerable<T>> GetMany(string criteria, object parameters, string order = "")
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
+            return await UnitOfWork.Connection.QueryAsync<T>(
                 $"select * from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria} {order}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
@@ -253,23 +261,25 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="parameters">Parameters in the criteria statement. Must be the same as the Parameter names in the Criteria statement.</param>
         /// <param name="order">Fields to be sorted are specified here </param>
         /// <returns>Related Entity list registered in database</returns>
-        public IPagedList<T> GetMany(Page page, string criteria, object parameters, string order = "")
+        public async Task<IPagedList<T>> GetMany(Page page, string criteria, object parameters, string order = "")
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
                $"select * from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}  {order} limit {page.PageSize} offset {page.Skip}",
                param: parameters,
-               transaction: UnitOfWork.Transaction).ToPagedList(1, page.PageSize);
+               transaction: UnitOfWork.Transaction);
+
+            return await res.ToPagedListAsync(1, page.PageSize);
         }
 
-        public List<AuditChange> GetAudit(long id)
+        public async Task<List<AuditChange>> GetAudit(long id)
         {
             List<AuditChange> rslt = new List<AuditChange>();
             AuditRepository repository = UnitOfWork.Repositories[typeof(AuditEntity)];
 
-            var auditTrail = repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = DataAnnotationHelper.GetTableName<T>() }, "createtime DESC");
+            var auditTrail = await repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = DataAnnotationHelper.GetTableName<T>() }, "createtime DESC");
 
             // we are looking for audit-history of the record selected.
 

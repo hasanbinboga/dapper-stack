@@ -33,7 +33,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Verilen tek entity nin veri tabanına kayıt işlemlerini sağlar.
         /// </summary>
         /// <param name="entity">Entity bilgisi</param>
-        public virtual long Add(T entity)
+        public virtual async Task<long> Add(T entity)
         {
             //Dapper' ın yaklaşımı nedeniyle burada tanımlanması mümkün değildir.
             throw new NotImplementedException();
@@ -43,7 +43,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Listesi verilen entity leri veri tabanına kayıt işlemlerini sağlar
         /// </summary>
         /// <param name="entities">Kaydedilmesi istenilen entity listesi</param>
-        public virtual List<long> Add(IEnumerable<T> entities)
+        public virtual async Task<List<long>> Add(IEnumerable<T> entities)
         {
             //Dapper' ın yaklaşımı nedeniyle burada tanımlanması mümkün değildir.
             throw new NotImplementedException();
@@ -53,7 +53,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Belirtilen entiy nin veritanında güncellenmesini sağlar
         /// </summary>
         /// <param name="entity">Veritabanında güncellenmesi istenen verinin güncellenmiş hali </param>
-        public virtual void Update(T entity)
+        public virtual async Task Update(T entity)
         {
             //Dapper' ın yaklaşımı nedeniyle burada tanımlanması mümkün değildir.
             throw new NotImplementedException();
@@ -62,18 +62,18 @@ namespace NetFrame.Infrastructure.Repositories
         /// Verilen entity yi veritabanından silme işlemlerini gerçekleştirir.
         /// </summary>
         /// <param name="entity">Silinmek istenen Entity bilgisi</param>
-        public virtual void Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
-            Delete(entity.Id);
+            await Delete(entity.Id);
         }
 
         /// <summary>
         /// Verilen id ye sahip entity yi veritabanından silme islemlerini gerçekleştirir.
         /// </summary>
         /// <param name="id">Entity id bilgisi</param>
-        public virtual void Delete(long id)
+        public virtual async Task Delete(long id)
         {
-            UnitOfWork.Connection.Execute(
+            await UnitOfWork.Connection.ExecuteAsync(
               $"delete from {DataAnnotationHelper.GetTableName<T>()} where Id = @Id",
               param: new { Id = id },
               transaction: UnitOfWork.Transaction);
@@ -84,10 +84,10 @@ namespace NetFrame.Infrastructure.Repositories
         /// Listesi verilen entity leri veri tabanından silme işlemlerini gerçekleştirir.
         /// </summary>
         /// <param name="entities">veritabanından silinmek istenen entity listesi</param>
-        public virtual void Delete(IEnumerable<T> entities)
+        public virtual async Task Delete(IEnumerable<T> entities)
         {
             var ids = entities.Cast<Entity>().Select(e => e.Id).ToArray();
-            Delete(ids);
+            await Delete(ids);
         }
 
 
@@ -95,20 +95,15 @@ namespace NetFrame.Infrastructure.Repositories
         /// Id listesi verilen entity leri veri tabanından silme işlemlerini gerçekleştirir.
         /// </summary>
         /// <param name="idList">veritabanından silinmek istenen entity lerin id listesi</param>
-        public virtual void Delete(IList<long> idList)
+        public virtual async Task Delete(IList<long> idList)
         {
-            UnitOfWork.Connection.Execute(
+            await UnitOfWork.Connection.ExecuteAsync(
               $"delete from {DataAnnotationHelper.GetTableName<T>()} where  id = ANY(@Ids)",
               param: new { Ids = idList },
               transaction: UnitOfWork.Transaction);
         }
 
-        
 
-        public void Passive(IEnumerable<T> entityList)
-        {
-            throw new NotImplementedException();
-        } 
 
         /// <summary>
         /// Verilen id ye sahip entity yi veritabanında pasife alma islemlerini gerçekleştirir.
@@ -117,12 +112,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">pasife alan kullanıcı adı</param>
         /// <param name="updateTime">pasife alınma tarihi</param>
         /// <param name="ipAddress">pasife alan kullanıcının ip adresi</param>
-        public void Passive(long id, string userName, DateTime? updateTime, string ipAddress)
+        public async Task Passive(long id, string userName, DateTime? updateTime, string ipAddress)
         {
-            UnitOfWork.Connection.Execute(
-               $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET where Id = @Id",
-               param: new { Deleted = true, Id = id, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
-               transaction: UnitOfWork.Transaction);
+            await UnitOfWork.Connection.ExecuteAsync(
+                $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET where Id = @Id",
+                param: new { Deleted = true, Id = id, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
+                transaction: UnitOfWork.Transaction);
         }
 
         /// <summary>
@@ -132,9 +127,9 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">pasife alan kullanıcı adı</param>
         /// <param name="updateTime">pasife alınma tarihi</param>
         /// <param name="ipAddress">pasife alan kullanıcının ip adresi</param>
-        public void Passive(T entity, string userName, DateTime? updateTime, string ipAddress)
+        public async Task Passive(T entity, string userName, DateTime? updateTime, string ipAddress)
         {
-            Passive(entity.Id, userName, updateTime, ipAddress);
+            await Passive(entity.Id, userName, updateTime, ipAddress);
         }
 
         /// <summary>
@@ -144,10 +139,10 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">pasife alan kullanıcı adı</param>
         /// <param name="updateTime">pasife alınma tarihi</param>
         /// <param name="ipAddress">pasife alan kullanıcının ip adresi</param>
-        public virtual void Passive(IEnumerable<T> entityList, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(IEnumerable<T> entityList, string userName, DateTime? updateTime, string ipAddress)
         {
             var ids = entityList.Cast<Entity>().Select(e => e.Id).ToList();
-            Passive(ids, userName, updateTime, ipAddress);
+            await Passive(ids, userName, updateTime, ipAddress);
         }
 
         /// <summary>
@@ -157,12 +152,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="userName">pasife alan kullanıcı adı</param>
         /// <param name="updateTime">pasife alınma tarihi</param>
         /// <param name="ipAddress">pasife alan kullanıcının ip adresi</param>
-        public virtual void Passive(List<long> idList, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(List<long> idList, string userName, DateTime? updateTime, string ipAddress)
         {
-            UnitOfWork.Connection.Execute(
-                 $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET WHERE id = ANY(@Ids)",
-                 param: new { Deleted = true, Ids = idList, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
-                 transaction: UnitOfWork.Transaction);
+            await UnitOfWork.Connection.ExecuteAsync(
+                  $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET WHERE id = ANY(@Ids)",
+                  param: new { Deleted = true, Ids = idList, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
+                  transaction: UnitOfWork.Transaction);
         }
 
         /// <summary>
@@ -170,13 +165,13 @@ namespace NetFrame.Infrastructure.Repositories
         /// </summary>
         /// <param name="id">Entity id değeri</param>
         /// <returns>İlgili entity nesnesi</returns>
-        public virtual T GetById(long id)
+        public virtual async Task<T> GetById(long id)
         {
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<T>(
                  $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false AND Id = @Id",
                  param: new { Id = id },
-                 transaction: UnitOfWork.Transaction)
-                 .FirstOrDefault();
+                 transaction: UnitOfWork.Transaction);
+            return res;
         }
 
         /// <summary>
@@ -187,12 +182,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// var order = "id ASC, updateusername DESC";
         /// </param>
         /// <returns>veri tabanına kayıtlı ilgili Entity listesi</returns>
-        public virtual IEnumerable<T> GetAll(string order = "")
+        public virtual async Task<IEnumerable<T>> GetAll(string order = "")
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
-               $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order}")
-               .ToList();
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
+               $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order}");
+
+
+             return await res.ToListAsync();
         }
 
         /// <summary>
@@ -205,12 +202,13 @@ namespace NetFrame.Infrastructure.Repositories
         /// var order = "id ASC, updateusername DESC";
         /// </param>
         /// <returns>veri tabanına kayıtlı ilgili Entity listesi</returns>
-        public virtual IPagedList<T> GetAll(Page page, string order = "")
+        public virtual async Task<IPagedList<T>> GetAll(Page page, string order = "")
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
                $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order} limit {page.PageSize} offset {page.Skip}",
-               transaction: UnitOfWork.Transaction).ToPagedList(1, page.PageSize);
+               transaction: UnitOfWork.Transaction);
+             return await res.ToPagedListAsync(1, page.PageSize);
         }
 
         /// <summary>
@@ -226,14 +224,15 @@ namespace NetFrame.Infrastructure.Repositories
         /// var order = "id ASC, updateusername DESC";
         /// </param>
         /// <returns>veri tabanına kayıtlı ilgili Entity listesi</returns>
-        public virtual IEnumerable<T> GetMany(string criteria, object parameters, string order = "")
+        public virtual async  Task<IEnumerable<T>> GetMany(string criteria, object parameters, string order = "")
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
                 $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria} {order}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
+            return await res.ToListAsync();
         }
 
         /// <summary>
@@ -250,24 +249,25 @@ namespace NetFrame.Infrastructure.Repositories
         /// var order = "id ASC, updateusername DESC";
         /// </param>
         /// <returns>veri tabanına kayıtlı ilgili Entity listesi</returns>
-        public IPagedList<T> GetMany(Page page, string criteria, object parameters, string order = "")
+        public virtual async Task<IPagedList<T>> GetMany(Page page, string criteria, object parameters, string order = "")
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
-            return UnitOfWork.Connection.Query<T>(
+            var res = await UnitOfWork.Connection.QueryAsync<T>(
                $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}  {order} limit {page.PageSize} offset {page.Skip}",
                param: parameters,
-               transaction: UnitOfWork.Transaction).ToPagedList(1, page.PageSize);
+               transaction: UnitOfWork.Transaction);
+               return await res.ToPagedListAsync(1, page.PageSize);
         }
 
         /// <summary>
         /// Veri tabanındaki toplam aktif kayıt sayısını verir.
         /// </summary>
         /// <returns></returns>
-        public virtual int Count()
+        public virtual async Task<int> Count()
         {
-            return UnitOfWork.Connection.ExecuteScalar<int>(
+            return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
                 $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false",
                 transaction: UnitOfWork.Transaction);
         }
@@ -283,10 +283,10 @@ namespace NetFrame.Infrastructure.Repositories
         /// </param>
         /// <param name="parameters">Kriter metninde yer alan parametreler. Kriter Metnindeki Parametre adlarıyla aynı olmalıdır.</param>
         /// <returns></returns>
-        public virtual int Count(string criteria, object parameters)
+        public virtual async Task<int> Count(string criteria, object parameters)
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
-            return UnitOfWork.Connection.ExecuteScalar<int>(
+            return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
                 $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
@@ -297,12 +297,12 @@ namespace NetFrame.Infrastructure.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public List<AuditChange> GetAudit(long id)
+        public async Task<List<AuditChange>> GetAudit(long id)
         {
             List<AuditChange> rslt = new List<AuditChange>();
             AuditRepository repository = UnitOfWork.Repositories[typeof(AuditEntity)];
 
-            var auditTrail = repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = DataAnnotationHelper.GetTableName<T>() }, "createtime DESC");
+            var auditTrail = await repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = DataAnnotationHelper.GetTableName<T>() }, "createtime DESC");
 
             // we are looking for audit-history of the record selected.
 
@@ -325,6 +325,6 @@ namespace NetFrame.Infrastructure.Repositories
             return rslt;
         }
 
-       
+
     }
 }

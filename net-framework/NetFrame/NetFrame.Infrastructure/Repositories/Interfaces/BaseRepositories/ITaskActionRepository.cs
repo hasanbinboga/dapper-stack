@@ -7,7 +7,7 @@ namespace NetFrame.Infrastructure.Repositories
     /// </summary>
     public interface ITaskActionRepository : IBaseRepository<TaskActionEntity>
     {
-        List<TaskActionEntity> GetAllByTaskId(long taskId);
+        Task<List<TaskActionEntity>> GetAllByTaskId(long taskId);
 
     }
 }

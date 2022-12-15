@@ -29,7 +29,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual long Add(T entity)
+        public virtual async Task<long> Add(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -40,7 +40,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public virtual  List<long> Add(IEnumerable<T> entities)
+        public virtual async Task<List<long>> Add(IEnumerable<T> entities)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -50,7 +50,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Allows the specified entity to be updated in the database.
         /// </summary>
         /// <param name="entity">Updated version of the data requested to be updated in the database </param>
-        public void Update(T entity)
+        public virtual async Task Update(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -61,7 +61,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because the log records cannot be deleted.
         /// </summary>
         /// <param name="entity">silinecek log kaydı</param>
-        public void Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
@@ -71,13 +71,13 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because the log records cannot be deleted.
         /// </summary>
         /// <param name="id">silinecek log kaydı id si</param>
-        public void Delete(long id)
+        public virtual async Task Delete(long id)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
         }
 
-        public void Delete(IEnumerable<T> entities)
+        public virtual async Task Delete(IEnumerable<T> entities)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
@@ -87,7 +87,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because the log records cannot be deleted.
         /// </summary>
         /// <param name="idList">silinecek log kayıtlarının id leri</param>
-        public void Delete(IList<long> idList)
+        public virtual async Task Delete(IList<long> idList)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
@@ -97,7 +97,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because log records cannot be disabled.
         /// </summary>
         /// <param name="id">pasife alınacak log kaydı idsi</param>
-        public void Passive(long id, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(long id, string userName, DateTime? updateTime, string ipAddress)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
@@ -107,7 +107,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because log records cannot be disabled.
         /// </summary>
         /// <param name="entity">pasife alınacak log kaydı </param>
-        public void Passive(T entity, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(T entity, string userName, DateTime? updateTime, string ipAddress)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
@@ -117,7 +117,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because log records cannot be disabled.
         /// </summary>
         /// <param name="entityList">pasife alınacak log kayıtları </param>
-        public void Passive(IEnumerable<T> entityList, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(IEnumerable<T> entityList, string userName, DateTime? updateTime, string ipAddress)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
@@ -127,19 +127,18 @@ namespace NetFrame.Infrastructure.Repositories
         /// It throws an error because log records cannot be disabled.
         /// </summary>
         /// <param name="idList">pasife alınacak log kayıtlarının id leri </param>
-        public void Passive(List<long> idList, string userName, DateTime? updateTime, string ipAddress)
+        public virtual async Task Passive(List<long> idList, string userName, DateTime? updateTime, string ipAddress)
         {
             //No improvements were made as the log records should not be deleted.
             throw new NotImplementedException();
         }
 
-        public T GetById(long id)
+        public virtual async Task<T> GetById(long id)
         {
-            return UnitOfWork.Connection.Query<T>(
+            return await UnitOfWork.Connection.QueryFirstOrDefaultAsync<T>(
                 $"select * from {DataAnnotationHelper.GetTableName<T>()} where Id = @Id",
                 param: new { Id = id },
-                transaction: UnitOfWork.Transaction)
-                .FirstOrDefault();
+                transaction: UnitOfWork.Transaction);
         }
 
         /// <summary>
@@ -147,70 +146,70 @@ namespace NetFrame.Infrastructure.Repositories
         /// </summary>
         /// <param name="order">Fields to be sorted are specified here </param>
         /// <returns>Related Entity list registered in database</returns>
-        public IEnumerable<T> GetAll(string order = "")
+        public virtual async Task<IEnumerable<T>> GetAll(string order = "")
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} {order}")
-               .ToList();
+            return await (await UnitOfWork.Connection.QueryAsync<T>(
+               $"select * from {DataAnnotationHelper.GetTableName<T>()} {order}"))
+               .ToListAsync();
         }
 
-        
-        public IPagedList<T> GetAll(Page page, string order = "")
+
+        public virtual async Task<IPagedList<T>> GetAll(Page page, string order = "")
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
+            return await (await UnitOfWork.Connection.QueryAsync<T>(
                $"select * from {DataAnnotationHelper.GetTableName<T>()}  {order} limit {page.PageSize} offset {page.Skip}",
-               transaction: UnitOfWork.Transaction).ToPagedList(1, page.PageSize);
+               transaction: UnitOfWork.Transaction)).ToPagedListAsync(1, page.PageSize);
         }
 
-        
-        public IEnumerable<T> GetMany(string criteria, object parameters, string order)
+
+        public virtual async Task<IEnumerable<T>> GetMany(string criteria, object parameters, string order)
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
-            return UnitOfWork.Connection.Query<T>(
+            return await UnitOfWork.Connection.QueryAsync<T>(
                 $"select * from {DataAnnotationHelper.GetTableName<T>()} {criteria} {order}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
         }
 
-        
-        public IPagedList<T> GetMany(Page page, string criteria, object parameters, string order)
+
+        public virtual async Task<IPagedList<T>> GetMany(Page page, string criteria, object parameters, string order)
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
-            return UnitOfWork.Connection.Query<T>(
+            return await(await UnitOfWork.Connection.QueryAsync<T>(
                $"select * from {DataAnnotationHelper.GetTableName<T>()} {criteria}  {order} limit {page.PageSize} offset {page.Skip}",
                param: parameters,
-               transaction: UnitOfWork.Transaction).ToPagedList(1, page.PageSize);
+               transaction: UnitOfWork.Transaction)).ToPagedListAsync(1, page.PageSize);
         }
 
-       
-        public int Count()
+
+        public virtual async Task<int> Count()
         {
-            return UnitOfWork.Connection.ExecuteScalar<int>(
+            return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
                $"select count(*) from {DataAnnotationHelper.GetTableName<T>()}",
                transaction: UnitOfWork.Transaction);
         }
 
-        
-        public int Count(string criteria, object parameters)
+
+        public virtual async Task<int> Count(string criteria, object parameters)
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
-            return UnitOfWork.Connection.ExecuteScalar<int>(
+            return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
                 $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} {criteria}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
         }
 
-        public List<AuditChange> GetAudit(long id)
+        public virtual async Task<List<AuditChange>> GetAudit(long id)
         {
             List<AuditChange> rslt = new List<AuditChange>();
             AuditRepository repository = UnitOfWork.Repositories[typeof(AuditEntity)];
 
-            var auditTrail = repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = DataAnnotationHelper.GetTableName<T>() }, "createtime DESC");
+            var auditTrail = await repository.GetMany("keyfieldid= @Id AND datamodel=@DataModel", new { Id = id, DataModel = DataAnnotationHelper.GetTableName<T>() }, "createtime DESC");
 
             // we are looking for audit-history of the record selected.
 

@@ -13,6 +13,6 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="id">id value of related data in database</param>
         /// <param name="entityType">Entity type</param>
         /// <returns>If there is a data history related to the requested data, it returns a list of changes made. Otherwise, an empty list is returned.</returns>
-        List<AuditChange> GetAudit(long id, Type entityType);
+        Task<List<AuditChange>> GetAudit(long id, Type entityType);
     }
 }
