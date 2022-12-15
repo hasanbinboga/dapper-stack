@@ -70,7 +70,7 @@ namespace NetFrame.Infrastructure.Repositories
             try
             {
                 await UnitOfWork.Connection.ExecuteAsync(
-                    "update exceptions set modulename=@ModuleName, classname=@ClassName, exceptioncode=@ExceptionCode, description=@Description, stacktrace=@Stacktrace, exceptiontype=@ExceptionType, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  where Id = @Id",
+                    "UPDATE exceptions SET modulename=@ModuleName, classname=@ClassName, exceptioncode=@ExceptionCode, description=@Description, stacktrace=@Stacktrace, exceptiontype=@ExceptionType, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
             }

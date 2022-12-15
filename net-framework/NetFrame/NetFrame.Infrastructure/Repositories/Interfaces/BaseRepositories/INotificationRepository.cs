@@ -3,7 +3,7 @@
 namespace NetFrame.Infrastructure.Repositories
 {
     /// <summary>
-    /// Repository interface class where Notification data is managed
+    /// Repository interface class WHERE Notification data is managed
     /// </summary>
     public interface INotificationRepository : IBaseRepository<NotificationEntity>
     {

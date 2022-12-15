@@ -70,7 +70,7 @@ namespace NetFrame.Infrastructure.Repositories
             try
             {
                await UnitOfWork.Connection.ExecuteAsync(
-                    "update messages set title = @Title, body = @Body, receiverusername = @ReceiverUserName, receiveruserfullname = @ReceiverUserFullname, sendtime = @SendTime, senderusername = @SenderUserName, senderuserfullname = @SenderUserFullname, readstatus = @ReadStatus, readtime = @ReadTime, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  where Id = @Id",
+                    "UPDATE messages SET title = @Title, body = @Body, receiverusername = @ReceiverUserName, receiveruserfullname = @ReceiverUserFullname, sendtime = @SendTime, senderusername = @SenderUserName, senderuserfullname = @SenderUserFullname, readstatus = @ReadStatus, readtime = @ReadTime, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
             }

@@ -136,7 +136,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<T> GetById(long id)
         {
             return await UnitOfWork.Connection.QueryFirstOrDefaultAsync<T>(
-                $"select * from {DataAnnotationHelper.GetTableName<T>()} where Id = @Id",
+                $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} WHERE id = @Id",
                 param: new { Id = id },
                 transaction: UnitOfWork.Transaction);
         }
@@ -150,7 +150,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             return await (await UnitOfWork.Connection.QueryAsync<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} {order}"))
+               $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} {order}"))
                .ToListAsync();
         }
 
@@ -159,7 +159,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             return await (await UnitOfWork.Connection.QueryAsync<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()}  {order} limit {page.PageSize} offset {page.Skip}",
+               $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()}  {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                transaction: UnitOfWork.Transaction)).ToPagedListAsync(1, page.PageSize);
         }
 
@@ -169,7 +169,7 @@ namespace NetFrame.Infrastructure.Repositories
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             return await UnitOfWork.Connection.QueryAsync<T>(
-                $"select * from {DataAnnotationHelper.GetTableName<T>()} {criteria} {order}",
+                $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} {criteria} {order}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
         }
@@ -181,7 +181,7 @@ namespace NetFrame.Infrastructure.Repositories
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
             return await(await UnitOfWork.Connection.QueryAsync<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} {criteria}  {order} limit {page.PageSize} offset {page.Skip}",
+               $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} {criteria}  {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                param: parameters,
                transaction: UnitOfWork.Transaction)).ToPagedListAsync(1, page.PageSize);
         }
@@ -190,7 +190,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<int> Count()
         {
             return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
-               $"select count(*) from {DataAnnotationHelper.GetTableName<T>()}",
+               $"SELECT count(*) FROM {DataAnnotationHelper.GetTableName<T>()}",
                transaction: UnitOfWork.Transaction);
         }
 
@@ -199,7 +199,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
-                $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} {criteria}",
+                $"SELECT count(*) FROM {DataAnnotationHelper.GetTableName<T>()} {criteria}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
         }

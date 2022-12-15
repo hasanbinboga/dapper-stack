@@ -17,14 +17,14 @@ namespace NetFrame.Infrastructure.Repositories
         public OptionEntity[] GetList()
         {
             return UnitOfWork.Connection.Query<OptionEntity>(
-              "select ad as label, id as value from city where NOT isdeleted ORDER BY id",
+              "SELECT ad as label, id as value FROM city WHERE NOT isdeleted ORDER BY id",
               transaction: UnitOfWork.Transaction).ToArray();
         }
 
         public OptionEntity[] GetListByRegionRef(short regionRef)
         {
             return UnitOfWork.Connection.Query<OptionEntity>(
-               "select ad as label, id as value from city where NOT isdeleted AND regionref = @RegionRef ORDER BY id",
+               "SELECT ad as label, id as value FROM city WHERE NOT isdeleted AND regionref = @RegionRef ORDER BY id",
                param: new { RegionRef = regionRef },
                transaction: UnitOfWork.Transaction).ToArray();
         }

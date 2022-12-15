@@ -38,7 +38,7 @@ namespace NetFrame.Common.Extension
         public const int Pbkdf2Index = 2;
 
         /// <summary>
-        /// Creates Pbkdf2 hash from given password.
+        /// Creates Pbkdf2 hash FROM given password.
         /// </summary>
         /// <param name="pass">Password for hash</param>
         /// <returns>Hash of the password</returns>
@@ -62,7 +62,7 @@ namespace NetFrame.Common.Extension
         /// <returns>Return true if pass is valid else return false</returns>
         public static bool CheckPassword(string pass, string hashValue)
         {
-            // Extract the parameters from the hash
+            // Extract the parameters FROM the hash
             char[] delimiter = { ':' };
             string[] split = hashValue.Split(delimiter);
             int iterations = int.Parse(split[IterationIndex]);

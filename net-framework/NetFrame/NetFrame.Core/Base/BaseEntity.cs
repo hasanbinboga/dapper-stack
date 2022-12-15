@@ -3,7 +3,7 @@
 namespace NetFrame.Core
 {
     /// <summary>
-    /// Master data class derived from Entity class
+    /// Master data class derived FROM Entity class
     /// </summary>
 
     public class BaseEntity : Entity

@@ -3,7 +3,7 @@
 namespace NetFrame.Infrastructure.Repositories
 {
     /// <summary>
-    /// Repository interface class where Message data is managed
+    /// Repository interface class WHERE Message data is managed
     /// </summary>
     public interface IMessageRepository : IBaseRepository<MessageEntity>
     {

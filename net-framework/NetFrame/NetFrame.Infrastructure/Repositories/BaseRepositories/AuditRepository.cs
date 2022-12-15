@@ -76,7 +76,7 @@ namespace NetFrame.Infrastructure.Repositories
             try
             {
                 await UnitOfWork.Connection.ExecuteAsync(
-                    "UPDATE audit SET keyfieldid = @KeyFieldId, datamodel = @DataModel, valuebefore = @ValueBefore::jsonb, valueafter = @ValueAfter::jsonb, changes = @Changes::jsonb, actiontype= @ActionType, transactionid = @TransactionId, applicationname = @ApplicationName where Id = @Id",
+                    "UPDATE audit SET keyfieldid = @KeyFieldId, datamodel = @DataModel, valuebefore = @ValueBefore::jsonb, valueafter = @ValueAfter::jsonb, changes = @Changes::jsonb, actiontype= @ActionType, transactionid = @TransactionId, applicationname = @ApplicationName WHERE id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
             }
@@ -88,7 +88,7 @@ namespace NetFrame.Infrastructure.Repositories
 
 
         /// <summary>
-        /// Gets the data history of the given entity from the database
+        /// Gets the data history of the given entity FROM the database
         /// </summary>
         /// <param name="id">id value of related data in database</param>
         /// <param name="entityType">Entity type</param>

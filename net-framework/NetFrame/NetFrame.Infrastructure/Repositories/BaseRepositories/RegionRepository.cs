@@ -32,7 +32,7 @@ namespace NetFrame.Infrastructure.Repositories
         public OptionEntity[] GetList()
         {
             return UnitOfWork.Connection.Query<OptionEntity>(
-             "select ad as label, id as value from region where NOT isdeleted ORDER BY id",
+             "SELECT ad as label, id as value FROM region WHERE NOT isdeleted ORDER BY id",
              transaction: UnitOfWork.Transaction).ToArray();
         }
     }

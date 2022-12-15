@@ -13,7 +13,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// <summary>
         /// Builder function of Info Log repository class
         /// </summary>
-        /// <param name="unitOfWork">Context instance where InfoLog data is located</param>
+        /// <param name="unitOfWork">Context instance WHERE InfoLog data is located</param>
         public InfoLogRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
 

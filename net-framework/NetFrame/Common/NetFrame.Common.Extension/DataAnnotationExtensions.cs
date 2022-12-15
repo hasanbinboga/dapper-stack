@@ -12,7 +12,7 @@ namespace NetFrame.Common.Extension
     {
         #region Table
         /// <summary>
-        /// Get Table Name from Table attribute
+        /// Get Table Name FROM Table attribute
         /// </summary>
         /// <typeparam name="T">Type name</typeparam>
         /// <returns>Database Table Name</returns>
@@ -37,7 +37,7 @@ namespace NetFrame.Common.Extension
         #region MaxLength
 
         /// <summary>
-        /// Get maximum length from attribute
+        /// Get maximum length FROM attribute
         /// </summary>
         /// <typeparam name="T">Type of instance</typeparam>
         /// <param name="propExpression">property expression</param>

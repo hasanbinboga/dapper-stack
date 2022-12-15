@@ -31,27 +31,27 @@ namespace NetFrame.Infrastructure
         void Update(T entity);
 
         /// <summary>
-        /// It performs the operations of deleting the given entity from the database.
+        /// It performs the operations of deleting the given entity FROM the database.
         /// </summary>
         /// <param name="entity">Entity information to be deleted</param>
         void Delete(T entity);
 
         /// <summary>
-        /// It performs the operations of deleting the entity with the given id from the database.
+        /// It performs the operations of deleting the entity with the given id FROM the database.
         /// </summary>
         /// <param name="id">Entity id information</param>
         void Delete(long id);
 
         
         /// <summary>
-        /// It performs the operations of deleting the entities whose list is given from the database.
+        /// It performs the operations of deleting the entities whose list is given FROM the database.
         /// </summary>
-        /// <param name="entities">Entity list to be deleted from database</param>
+        /// <param name="entities">Entity list to be deleted FROM database</param>
         void Delete(IEnumerable<T> entities);
         /// <summary>
-        /// It performs the operations of deleting the entities whose id list is given from the database.
+        /// It performs the operations of deleting the entities whose id list is given FROM the database.
         /// </summary>
-        /// <param name="idList">Id list of entities to be deleted from database</param>
+        /// <param name="idList">Id list of entities to be deleted FROM database</param>
         void Delete(IList<long> idList);
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace NetFrame.Infrastructure
         IPagedList<T> GetAll(Page page, string order = "");
 
         /// <summary>
-        /// It returns records that match the criteria and given parameters in the where statement.
+        /// It returns records that match the criteria and given parameters in the WHERE statement.
         
         
         
@@ -127,7 +127,7 @@ namespace NetFrame.Infrastructure
         IEnumerable<T> GetMany(string criteria, object parameters, string order);
 
         /// <summary>
-        /// It returns records that match the criteria and given parameters in the where statement.
+        /// It returns records that match the criteria and given parameters in the WHERE statement.
         
         
         
@@ -154,7 +154,7 @@ namespace NetFrame.Infrastructure
         /// Returns the total number of active records based on the specified query criteria
         /// </summary>
         /// <param name="criteria">
-        /// It returns records that match the criteria and given parameters in the where statement.
+        /// It returns records that match the criteria and given parameters in the WHERE statement.
         
         
         

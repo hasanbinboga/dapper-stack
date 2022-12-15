@@ -48,13 +48,13 @@ namespace NetFrame.Core.Entities
         public AuditActionType ActionType { get; set; }
 
         /// <summary>
-        ///  Transaction Id Information where the change was made
+        ///  Transaction Id Information WHERE the change was made
         /// </summary>
         [Column("transactionid")]
         public long TransactionId { get; set; }
 
         /// <summary>
-        ///  Information from which application the change was made
+        ///  Information FROM which application the change was made
         /// </summary>
         [Column("applicationname")]
         public string ApplicationName { get; set; }

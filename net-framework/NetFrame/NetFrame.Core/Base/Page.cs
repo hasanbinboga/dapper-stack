@@ -1,7 +1,7 @@
 ﻿namespace NetFrame.Core
 {
     /// <summary>
-    /// The class where the pagination information is kept
+    /// The class WHERE the pagination information is kept
     /// </summary>
     public class Page
     {

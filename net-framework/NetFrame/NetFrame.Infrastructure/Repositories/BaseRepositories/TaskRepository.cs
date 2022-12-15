@@ -5,14 +5,14 @@ using NetFrame.Core.Entities;
 namespace NetFrame.Infrastructure.Repositories
 {
     /// <summary>
-    /// Görev (TaskEntity) verilerinin yönetildiği repository interface sınıfı implementasyonu
+    /// Implementation of repository interface class WHERE task (TaskEntity) data is managed
     /// </summary>
     public class TaskRepository : BaseRepository<TaskEntity>, ITaskRepository
     {
         /// <summary>
-        /// Görev repository sınıfının oluşturucu fonksiyonu
+        /// Contructor
         /// </summary>
-        /// <param name="unitOfWork">TaskEntity verisinin bulunduğu context örneği (instance)</param>
+        /// <param name="unitOfWork">Context instance with TaskEntity data</param>
         public TaskRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
 
@@ -83,7 +83,7 @@ namespace NetFrame.Infrastructure.Repositories
             try
             {
                 await UnitOfWork.Connection.ExecuteAsync(
-                    "update tasks set title = @Title, taskdescription = @TaskDescription, assigneduserid = @AssignerUserId, assigneeuserid = @AssigneeUserId, taskstatus = @TaskStatus, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  where Id = @Id",
+                    "UPDATE tasks SET title = @Title, taskdescription = @TaskDescription, assigneduserid = @AssignerUserId, assigneeuserid = @AssigneeUserId, taskstatus = @TaskStatus, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
             }

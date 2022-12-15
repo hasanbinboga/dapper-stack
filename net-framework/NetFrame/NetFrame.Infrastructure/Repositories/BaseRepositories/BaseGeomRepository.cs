@@ -74,7 +74,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task Delete(long id)
         {
             await UnitOfWork.Connection.ExecuteAsync(
-              $"delete from {DataAnnotationHelper.GetTableName<T>()} where Id = @Id",
+              $"delete FROM {DataAnnotationHelper.GetTableName<T>()} WHERE id = @Id",
               param: new { Id = id },
               transaction: UnitOfWork.Transaction);
         }
@@ -98,7 +98,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task Delete(IList<long> idList)
         {
             await UnitOfWork.Connection.ExecuteAsync(
-              $"delete from {DataAnnotationHelper.GetTableName<T>()} where  id = ANY(@Ids)",
+              $"delete FROM {DataAnnotationHelper.GetTableName<T>()} WHERE  id = ANY(@Ids)",
               param: new { Ids = idList },
               transaction: UnitOfWork.Transaction);
         }
@@ -115,7 +115,7 @@ namespace NetFrame.Infrastructure.Repositories
         public async Task Passive(long id, string userName, DateTime? updateTime, string ipAddress)
         {
             await UnitOfWork.Connection.ExecuteAsync(
-                $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET where Id = @Id",
+                $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET WHERE id = @Id",
                 param: new { Deleted = true, Id = id, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
                 transaction: UnitOfWork.Transaction);
         }
@@ -168,7 +168,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<T> GetById(long id)
         {
             var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<T>(
-                 $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false AND Id = @Id",
+                 $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted AND id = @Id",
                  param: new { Id = id },
                  transaction: UnitOfWork.Transaction);
             return res;
@@ -186,7 +186,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-               $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order}");
+               $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {order}");
 
 
              return await res.ToListAsync();
@@ -206,7 +206,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-               $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order} limit {page.PageSize} offset {page.Skip}",
+               $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                transaction: UnitOfWork.Transaction);
              return await res.ToPagedListAsync(1, page.PageSize);
         }
@@ -214,7 +214,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// <summary>
         /// Where ifadesi içerisinde bulunan kriterler ve verilen parametreler ile eşleşen
         /// kayıtları getirir.
-        /// Örnek: where="ad=@Ad AND soyad=@SoyAd";
+        /// Örnek: WHERE="ad=@Ad AND soyad=@SoyAd";
         ///  var parameters = new {Ad="Ahmet", Soyad="Yılmaz"};
         /// </summary>
         /// <param name="criteria">SQL ifadesinin sonuna eklenecek kriter metni</param>
@@ -229,7 +229,7 @@ namespace NetFrame.Infrastructure.Repositories
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-                $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria} {order}",
+                $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria} {order}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
             return await res.ToListAsync();
@@ -238,7 +238,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// <summary>
         /// Where ifadesi içerisinde bulunan kriterler ve verilen parametreler ile eşleşen
         /// kayıtları getirir.
-        /// Örnek: where="ad=@Ad AND soyad=@SoyAd";
+        /// Örnek: WHERE="ad=@Ad AND soyad=@SoyAd";
         ///  var parameters = new {Ad="Ahmet", Soyad="Yılmaz"};
         /// </summary>
         /// <param name="page">Talep edilen veri sayfasına ait bilgiler</param>
@@ -255,7 +255,7 @@ namespace NetFrame.Infrastructure.Repositories
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-               $"select *, st_astext(geom) geomwkt from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}  {order} limit {page.PageSize} offset {page.Skip}",
+               $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria}  {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                param: parameters,
                transaction: UnitOfWork.Transaction);
                return await res.ToPagedListAsync(1, page.PageSize);
@@ -268,7 +268,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<int> Count()
         {
             return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
-                $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false",
+                $"SELECT count(*) FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted",
                 transaction: UnitOfWork.Transaction);
         }
 
@@ -278,7 +278,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="criteria">
         /// Where ifadesi içerisinde bulunan kriterler ve verilen parametreler ile eşleşen
         /// kayıtları getirir.
-        /// Örnek: where="ad=@Ad AND soyad=@SoyAd";
+        /// Örnek: WHERE="ad=@Ad AND soyad=@SoyAd";
         ///  var parameters = new {Ad="Ahmet", Soyad="Yılmaz"};
         /// </param>
         /// <param name="parameters">Kriter metninde yer alan parametreler. Kriter Metnindeki Parametre adlarıyla aynı olmalıdır.</param>
@@ -287,7 +287,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             return await UnitOfWork.Connection.ExecuteScalarAsync<int>(
-                $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}",
+                $"SELECT count(*) FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
         }

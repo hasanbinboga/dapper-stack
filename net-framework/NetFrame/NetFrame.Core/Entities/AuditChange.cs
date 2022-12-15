@@ -1,7 +1,7 @@
 ﻿namespace NetFrame.Core.Entities
 {
     /// <summary>
-    /// The class that keeps the metadata of the changed entity and the changes as old and new when the data history is pulled from the database.
+    /// The class that keeps the metadata of the changed entity and the changes as old and new when the data history is pulled FROM the database.
     /// </summary>
     public class AuditChange
     {

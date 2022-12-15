@@ -19,7 +19,7 @@ namespace NetFrame.Common.Utils
         private const int HashSize = 20;
 
         /// <summary>
-        /// Generates Hash from Password
+        /// Generates Hash FROM Password
         /// </summary>
         /// <param name="password">password</param>
         /// <param name="iterations">iteration count</param>

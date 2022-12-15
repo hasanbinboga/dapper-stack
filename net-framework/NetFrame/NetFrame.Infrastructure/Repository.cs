@@ -58,9 +58,9 @@ namespace NetFrame.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// It performs the operations of deleting the entities whose list is given from the database.
+        /// It performs the operations of deleting the entities whose list is given FROM the database.
         /// </summary>
-        /// <param name="entities">Entity list to be deleted from database</param>
+        /// <param name="entities">Entity list to be deleted FROM database</param>
         public virtual async Task Delete(IEnumerable<T> entities)
         {
             var ids = entities.Cast<Entity>().Select(e => e.Id).ToArray();
@@ -68,13 +68,13 @@ namespace NetFrame.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// It performs the operations of deleting the entities whose id list is given from the database.
+        /// It performs the operations of deleting the entities whose id list is given FROM the database.
         /// </summary>
-        /// <param name="idList">Id list of entities to be deleted from database</param>
+        /// <param name="idList">Id list of entities to be deleted FROM database</param>
         public virtual async Task Delete(IList<long> idList)
         {
             await UnitOfWork.Connection.ExecuteAsync(
-                $"delete from {DataAnnotationHelper.GetTableName<T>()} where id = ANY(@Ids)",
+                $"delete FROM {DataAnnotationHelper.GetTableName<T>()} WHERE id = ANY(@Ids)",
                 param: new { Ids = idList },
                 transaction: UnitOfWork.Transaction);
         }
@@ -82,19 +82,19 @@ namespace NetFrame.Infrastructure.Repositories
 
 
         /// <summary>
-        /// It performs the operations of deleting the entity with the given id from the database.
+        /// It performs the operations of deleting the entity with the given id FROM the database.
         /// </summary>
         /// <param name="id">Entity id information</param>
         public virtual async Task Delete(long id)
         {
             await UnitOfWork.Connection.ExecuteAsync(
-                $"delete from {DataAnnotationHelper.GetTableName<T>()} where Id = @Id",
+                $"delete FROM {DataAnnotationHelper.GetTableName<T>()} WHERE id = @Id",
                 param: new { Id = id },
                 transaction: UnitOfWork.Transaction);
         }
 
         /// <summary>
-        /// It performs the operations of deleting the given entity from the database.
+        /// It performs the operations of deleting the given entity FROM the database.
         /// </summary>
         /// <param name="entity">Entity information to be deleted</param>
         public virtual async Task Delete(T entity)
@@ -112,13 +112,13 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task Passive(long id, string userName, DateTime? updateTime, string ipAddress)
         {
             await UnitOfWork.Connection.ExecuteAsync(
-                $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET where id = @Id",
+                $"UPDATE {DataAnnotationHelper.GetTableName<T>()} SET isdeleted=@Deleted, updateusername=@UserName, updatetime=@UpdateTime, updateipaddress=@IpAddress::INET WHERE id = @Id",
                 param: new { Deleted = true, Id = id, UserName = userName, UpdateTime = updateTime, IpAddress = ipAddress },
                 transaction: UnitOfWork.Transaction);
         }
 
         /// <summary>
-        /// It performs the operations of deactivating the given entity from the database.
+        /// It performs the operations of deactivating the given entity FROM the database.
         /// </summary>
         /// <param name="entity">Entity</param>
         /// <param name="userName">user name</param>
@@ -130,7 +130,7 @@ namespace NetFrame.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// It performs the operations of deactivating the given entity list from the database.
+        /// It performs the operations of deactivating the given entity list FROM the database.
         /// </summary>
         /// <param name="entityList">Entity list</param>
         /// <param name="userName">user name</param>
@@ -143,7 +143,7 @@ namespace NetFrame.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// It performs the operations of deactivating the given entity id list from the database.
+        /// It performs the operations of deactivating the given entity id list FROM the database.
         /// </summary>
         /// <param name="idList">Entity id listesi</param>
         /// <param name="userName">user name</param>
@@ -169,7 +169,7 @@ namespace NetFrame.Infrastructure.Repositories
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order}");
+               $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {order}");
 
             return await res.ToListAsync();
         }
@@ -185,7 +185,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false {order} limit {page.PageSize} offset {page.Skip}",
+               $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                transaction: UnitOfWork.Transaction);
 
             return await res.ToPagedListAsync(1, page.PageSize);
@@ -201,7 +201,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<T> GetById(long id)
         {
             var res = await UnitOfWork.Connection.QueryFirstOrDefaultAsync<T>(
-                 $"select * from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false AND Id = @Id",
+                 $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted AND id = @Id",
                  param: new { Id = id },
                  transaction: UnitOfWork.Transaction);
             return res;
@@ -215,7 +215,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async  Task<int> Count()
         {
             var res = await UnitOfWork.Connection.ExecuteScalarAsync<int>(
-                $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} WHERE isdeleted=false",
+                $"SELECT count(*) FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted",
                 transaction: UnitOfWork.Transaction);
 
             return res;
@@ -225,14 +225,14 @@ namespace NetFrame.Infrastructure.Repositories
         /// <summary>
         /// Returns the total number of active records based on the specified query criteria
         /// </summary>
-        /// <param name="criteria"> It returns records that match the criteria and given parameters in the where statement. </param>
+        /// <param name="criteria"> It returns records that match the criteria and given parameters in the WHERE statement. </param>
         /// <param name="parameters">Parameters in the criteria text. Must be the same as the Parameter names in the criteria.</param>
         /// <returns></returns>
         public virtual async Task<int> Count(string criteria, object parameters)
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             var res = await UnitOfWork.Connection.ExecuteScalarAsync<int>(
-                $"select count(*) from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}",
+                $"SELECT count(*) FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
 
@@ -240,7 +240,7 @@ namespace NetFrame.Infrastructure.Repositories
         }
 
 
-        /// <summary> It returns records that match the criteria and given parameters in the where statement. </summary>
+        /// <summary> It returns records that match the criteria and given parameters in the WHERE statement. </summary>
         /// <param name="criteria">Where clause</param>
         /// <param name="parameters">Parameters in the criteria statement. Must be the same as the Parameter names in the Criteria statement.</param>
         /// <param name="order">Fields to be sorted are specified here </param>
@@ -250,12 +250,12 @@ namespace NetFrame.Infrastructure.Repositories
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
             return await UnitOfWork.Connection.QueryAsync<T>(
-                $"select * from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria} {order}",
+                $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria} {order}",
                 param: parameters,
                 transaction: UnitOfWork.Transaction);
         }
 
-        /// <summary> It returns records that match the criteria and given parameters in the where statement. </summary>
+        /// <summary> It returns records that match the criteria and given parameters in the WHERE statement. </summary>
         /// <param name="page">Pagination info</param>
         /// <param name="criteria">Where clause</param>
         /// <param name="parameters">Parameters in the criteria statement. Must be the same as the Parameter names in the Criteria statement.</param>
@@ -267,7 +267,7 @@ namespace NetFrame.Infrastructure.Repositories
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
 
             var res = await UnitOfWork.Connection.QueryAsync<T>(
-               $"select * from {DataAnnotationHelper.GetTableName<T>()} where isdeleted=false {criteria}  {order} limit {page.PageSize} offset {page.Skip}",
+               $"SELECT * FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria}  {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                param: parameters,
                transaction: UnitOfWork.Transaction);
 

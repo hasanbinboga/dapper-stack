@@ -7,9 +7,9 @@ namespace NetFrame.Infrastructure.Repositories
     public class TaskActionRepository : BaseRepository<TaskActionEntity>, ITaskActionRepository
     {
         /// <summary>
-        /// Görev hareketleri sınıfının oluşturucu metodu
+        /// Constructor
         /// </summary>
-        /// <param name="unitOfWork">TaskActionAction verisi ile ilgili işlemlerin tannımları</param>
+        /// <param name="unitOfWork">Definitions of operations related to TaskActionAction data</param>
         public TaskActionRepository(IUnitOfWork unitOfWork):base(unitOfWork)
         {
             
@@ -69,7 +69,7 @@ namespace NetFrame.Infrastructure.Repositories
             try
             {
                 await UnitOfWork.Connection.ExecuteAsync(
-                    "update taskactions set taskref = @TaskRef, actiontime = @ActionTime, actiondescription = @ActionDescription, previousstatus = @PreviousStatus, newstatus = @NewStatus, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  where Id = @Id",
+                    "UPDATE taskactions SET taskref = @TaskRef, actiontime = @ActionTime, actiondescription = @ActionDescription, previousstatus = @PreviousStatus, newstatus = @NewStatus, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
                     param: entity,
                     transaction: UnitOfWork.Transaction);
             }

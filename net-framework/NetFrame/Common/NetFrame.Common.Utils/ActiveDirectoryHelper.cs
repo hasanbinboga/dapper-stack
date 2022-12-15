@@ -118,7 +118,7 @@ namespace NetFrame.Common.Utils
         #region User Account Methods
 
         ///<summary>
-        /// Kullanıcı şifresini set eder
+        /// Kullanıcı şifresini SET eder
         ///</summary>
         ///<param name="sUserName">Kullanıcı adı bilgisi</param>
         ///<param name="sNewPassword">yeni belirlenen şifre</param>

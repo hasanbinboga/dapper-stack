@@ -8,7 +8,7 @@ namespace NetFrame.Infrastructure.Repositories
     public interface IAuditRepository : IRepository<AuditEntity>
     {
         /// <summary>
-        /// Gets the data history of the given entity from the database
+        /// Gets the data history of the given entity FROM the database
         /// </summary>
         /// <param name="id">id value of related data in database</param>
         /// <param name="entityType">Entity type</param>

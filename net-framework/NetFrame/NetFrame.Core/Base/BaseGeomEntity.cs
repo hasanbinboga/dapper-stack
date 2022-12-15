@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace NetFrame.Core
 {
     /// <summary>
-    /// It is the main data class derived from the Entity class. Unlike BaseEntity, there are GeomWkt and Geometry porperties.
+    /// It is the main data class derived FROM the Entity class. Unlike BaseEntity, there are GeomWkt and Geometry porperties.
     /// </summary>
     public class BaseGeomEntity : GeomEntity
     {

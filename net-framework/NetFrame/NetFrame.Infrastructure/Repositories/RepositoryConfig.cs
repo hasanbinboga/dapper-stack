@@ -9,7 +9,7 @@ using NetFrame.Infrasturcture.TypeWorks.TypeHandlers;
 namespace NetFrame.Infrastructure.Repositories
 {
     /// <summary>
-    /// A static class that can be called from anywhere to enable register operations on the unitofwork of customized repository classes. If it is desired to use customized repository in UGA, the Configure function should be called once to the prepared console or web project.
+    /// A static class that can be called FROM anywhere to enable register operations on the unitofwork of customized repository classes. If it is desired to use customized repository in UGA, the Configure function should be called once to the prepared console or web project.
     /// </summary>
     public static class RepositoryConfig
     {

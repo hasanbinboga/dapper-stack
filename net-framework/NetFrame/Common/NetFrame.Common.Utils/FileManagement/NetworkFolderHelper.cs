@@ -69,7 +69,7 @@ namespace NetFrame.Common.Utils.FileManagement
         /// <summary>
         /// If the file information sent with arg is in the Network Shared folder, it is returned as a byte array.
         /// </summary>
-        /// <param name="arg">File to read from Network Shared folder</param>
+        /// <param name="arg">File to read FROM Network Shared folder</param>
         /// <returns>byte dizisi</returns>
         public byte[] GetFileFromServer(GetFileArg arg)
         {
@@ -124,7 +124,7 @@ namespace NetFrame.Common.Utils.FileManagement
             }
             catch (System.Exception exc)
             {
-                throw new UtilsException("An error occurred while reading the file from the server.", exc);
+                throw new UtilsException("An error occurred while reading the file FROM the server.", exc);
             }
             return response;
         }

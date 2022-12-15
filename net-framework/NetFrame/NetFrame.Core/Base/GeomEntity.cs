@@ -10,7 +10,7 @@ namespace NetFrame.Core
         private string _geomWkt;
 
         /// <summary>
-        /// Wkt information of spatial information The geometry field selected from the database should be wkt. (SELECT st_astext(geom) FROM ..)
+        /// Wkt information of spatial information The geometry field selected FROM the database should be wkt. (SELECT st_astext(geom) FROM ..)
         /// </summary>
         [Column("geomwkt")]
         public string GeomWkt
