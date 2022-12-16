@@ -87,8 +87,8 @@ namespace NetFrame.Infrastructure
         /// <summary>
         /// With the connection sentence, a connection is created to operate in the database.
         /// </summary>
-        /// <param name="connection">Veri tabanı bağlantısı</param>
-        /// <param name="isolationLevel">Veri erişim izolasyon seviyesi</param>
+        /// <param name="connection">Database connection</param>
+        /// <param name="isolationLevel">Data access isolation level</param>
         public UnitOfWork(string connectionString, IsolationLevel isolationLevel = IsolationLevel.Unspecified)
             : this(new NpgsqlConnection(connectionString), isolationLevel)
         {
@@ -97,11 +97,6 @@ namespace NetFrame.Infrastructure
         public IRepository<TEntity> Repository<TEntity>() where TEntity : Entity
 
         {
-            //if (ServiceLocator.IsLocationProviderSet)
-            //{
-            //    return ServiceLocator.Current.GetInstance<IRepository<TEntity>>();
-            //}
-
             if (_repositories == null)
                 _repositories = new Dictionary<Type, dynamic>();
 
@@ -122,7 +117,7 @@ namespace NetFrame.Infrastructure
         {
             try
             {
-                await _transaction.DisposeAsync();
+                await _transaction.CommitAsync();
                 return true;
             }
             catch (Exception ex)
