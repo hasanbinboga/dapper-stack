@@ -1,4 +1,6 @@
 ﻿
+using NetFrame.Core;
+using NetFrame.Infrastructure.Repositories;
 using System.Data;
 using System.Data.Common;
 
@@ -47,6 +49,9 @@ namespace NetFrame.Infrastructure
         /// All datasets associated with the application
         /// </summary>
         Dictionary<Type, dynamic> Repositories { get; set; }
+
+
+        IRepository<TEntity> Repository<TEntity>() where TEntity : Entity;
 
     }
 }

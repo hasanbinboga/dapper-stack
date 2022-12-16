@@ -107,7 +107,7 @@ namespace NetFrame.Infrastructure
             _repositories.Add(typeof(TEntity), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), this));
 
             return _repositories[typeof(TEntity)];
-        }
+        } 
 
         /// <summary>
         /// The method used to save changes made within the transaction in the database.
@@ -211,5 +211,7 @@ namespace NetFrame.Infrastructure
             await RealDispose(true);
             GC.SuppressFinalize(this);
         }
+
+     
     }
 }
