@@ -19,10 +19,10 @@ namespace NetFrame.Infrasturcture.TypeWorks.TypeHandlers
         {
             if (value is string && string.IsNullOrEmpty(value.ToString()) == false)
             {
-                var histories = JsonConvert.DeserializeObject<List<dynamic>>(value.ToString()).ToArray();
+                var histories = JsonConvert.DeserializeObject<List<dynamic>>(value.ToString()!)!.ToArray();
                 return histories;
             }
-            return null;
+            return null!;
         }
     }
 }

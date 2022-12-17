@@ -7,7 +7,7 @@ namespace NetFrame.Core
 {
     public class GeomEntity : Entity, IGeomEntity
     {
-        private string _geomWkt;
+        private string _geomWkt = string.Empty;
 
         /// <summary>
         /// Wkt information of spatial information The geometry field selected FROM the database should be wkt. (SELECT st_astext(geom) FROM ..)
@@ -30,7 +30,7 @@ namespace NetFrame.Core
                     }
                     else
                     {
-                        _geometry = null;
+                        _geometry = null!;
                     }
                 }
 
@@ -38,7 +38,7 @@ namespace NetFrame.Core
 
         }
 
-        private Geometry _geometry;
+        private Geometry? _geometry;
 
 
         /// <summary>
@@ -47,10 +47,10 @@ namespace NetFrame.Core
         [Column("geometry")]
         public Geometry Geometry
         {
-            get { return _geometry; }
+            get { return _geometry!; }
             set
             {
-                if (!_geometry.EqualsExact(value))
+                if (!_geometry!.EqualsExact(value))
                 {
                     _geomWkt = value.ToString();
                     _geometry = value;

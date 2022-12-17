@@ -15,13 +15,13 @@ namespace NetFrame.Core.Entities
         /// Title of task
         /// </summary> 
         [Column("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Description about task
         /// </summary> 
         [Column("taskdescription")]
-        public string TaskDescription { get; set; }
+        public string TaskDescription { get; set; } = string.Empty;
         /// <summary>
         /// id of assigned user
         /// </summary>
@@ -41,7 +41,7 @@ namespace NetFrame.Core.Entities
         /// <summary>
         /// Task actions
         /// </summary>
-        public List<TaskActionEntity> TaskActions { get; set; }
+        public List<TaskActionEntity> TaskActions { get; set; } = new List<TaskActionEntity>();
 
     }
 

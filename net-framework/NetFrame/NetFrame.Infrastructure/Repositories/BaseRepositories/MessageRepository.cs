@@ -51,10 +51,10 @@ namespace NetFrame.Infrastructure.Repositories
 
                 return entity.Id;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return -1;
-                throw ex;
+                throw;
             }
         }
 

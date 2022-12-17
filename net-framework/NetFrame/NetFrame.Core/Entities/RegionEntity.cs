@@ -8,6 +8,6 @@ namespace NetFrame.Core.Entities
 {
     public class RegionEntity: BaseGeomEntity
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

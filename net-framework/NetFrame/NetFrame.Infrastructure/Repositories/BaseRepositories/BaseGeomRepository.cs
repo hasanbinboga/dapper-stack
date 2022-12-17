@@ -20,9 +20,9 @@ namespace NetFrame.Infrastructure.Repositories
 
 
         /// <summary>
-        /// Genel repository sınıfı oluşturma (contructor)
+        /// contructor
         /// </summary>
-        /// <param name="unitOfWork">reposiyory de kullanılan entity nin içinde bulunduğu context instance bilgisi</param> 
+        /// <param name="unitOfWork">Context instance information of the entity used in the repository</param> 
         public BaseGeomRepository(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
@@ -30,23 +30,26 @@ namespace NetFrame.Infrastructure.Repositories
 
 
         /// <summary>
-        /// Verilen tek entity nin veri tabanına kayıt işlemlerini sağlar.
+        /// It provides the registration operations of the given single entity to the database.
         /// </summary>
-        /// <param name="entity">Entity bilgisi</param>
+        /// <param name="entity">Entity info</param>
         public virtual async Task<long> Add(T entity)
         {
-            //Dapper' ın yaklaşımı nedeniyle burada tanımlanması mümkün değildir.
-            throw new NotImplementedException();
+            //Due to Dapper's approach it is not possible to describe it here.
+
+            return await Task.Run(long () => { throw new NotImplementedException(); });
         }
 
         /// <summary>
-        /// Listesi verilen entity leri veri tabanına kayıt işlemlerini sağlar
+        /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Kaydedilmesi istenilen entity listesi</param>
         public virtual async Task<List<long>> Add(IEnumerable<T> entities)
         {
-            //Dapper' ın yaklaşımı nedeniyle burada tanımlanması mümkün değildir.
-            throw new NotImplementedException();
+            //Due to Dapper's approach it is not possible to describe it here.
+
+            return await Task.Run(List<long> () => { throw new NotImplementedException(); });
+
         }
 
         /// <summary>
@@ -55,8 +58,8 @@ namespace NetFrame.Infrastructure.Repositories
         /// <param name="entity">Veritabanında güncellenmesi istenen verinin güncellenmiş hali </param>
         public virtual async Task Update(T entity)
         {
-            //Dapper' ın yaklaşımı nedeniyle burada tanımlanması mümkün değildir.
-            throw new NotImplementedException();
+            //Due to Dapper's approach it is not possible to describe it here.
+            await Task.Run(() => { throw new NotImplementedException(); });
         }
         /// <summary>
         /// Verilen entity yi veritabanından silme işlemlerini gerçekleştirir.
@@ -189,7 +192,7 @@ namespace NetFrame.Infrastructure.Repositories
                $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {order}");
 
 
-             return await res.ToListAsync();
+            return await res.ToListAsync();
         }
 
         /// <summary>
@@ -208,7 +211,7 @@ namespace NetFrame.Infrastructure.Repositories
             var res = await UnitOfWork.Connection.QueryAsync<T>(
                $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                transaction: UnitOfWork.Transaction);
-             return await res.ToPagedListAsync(1, page.PageSize);
+            return await res.ToPagedListAsync(1, page.PageSize);
         }
 
         /// <summary>
@@ -224,7 +227,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// var order = "id ASC, updateusername DESC";
         /// </param>
         /// <returns>veri tabanına kayıtlı ilgili Entity listesi</returns>
-        public virtual async  Task<IEnumerable<T>> GetMany(string criteria, object parameters, string order = "")
+        public virtual async Task<IEnumerable<T>> GetMany(string criteria, object parameters, string order = "")
         {
             criteria = string.IsNullOrEmpty(criteria) ? string.Empty : "AND " + criteria;
             order = string.IsNullOrEmpty(order) ? string.Empty : " ORDER BY " + order;
@@ -258,7 +261,7 @@ namespace NetFrame.Infrastructure.Repositories
                $"SELECT *, st_astext(geom) geomwkt FROM {DataAnnotationHelper.GetTableName<T>()} WHERE NOT isdeleted {criteria}  {order} LIMIT {page.PageSize} OFFSET {page.Skip}",
                param: parameters,
                transaction: UnitOfWork.Transaction);
-               return await res.ToPagedListAsync(1, page.PageSize);
+            return await res.ToPagedListAsync(1, page.PageSize);
         }
 
         /// <summary>
@@ -312,12 +315,12 @@ namespace NetFrame.Infrastructure.Repositories
                 {
                     DateTimeStamp = record.CreateTime.ToString(CultureInfo.InvariantCulture),
                     AuditActionType = record.ActionType,
-                    AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)
+                    AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)!
                 };
                 if (record != null && !string.IsNullOrEmpty(record.Changes))
                 {
-                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record?.Changes);
-                    change.Changes.AddRange(delta);
+                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record?.Changes!)!;
+                    change.Changes.AddRange(delta!);
                 }
 
                 rslt.Add(change);

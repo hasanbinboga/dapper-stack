@@ -108,10 +108,10 @@ namespace NetFrame.Infrastructure.Repositories
                 {
                     DateTimeStamp = record.CreateTime.ToString(),
                     AuditActionType = record.ActionType,
-                    AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)
+                    AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)!
                 };
                 var delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record.Changes);
-                change.Changes.AddRange(delta);
+                change.Changes.AddRange(delta!);
                 rslt.Add(change);
             }
             return rslt;

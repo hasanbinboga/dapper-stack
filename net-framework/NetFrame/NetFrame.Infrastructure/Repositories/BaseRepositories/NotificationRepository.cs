@@ -34,7 +34,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public override async Task<long>Add(NotificationEntity entity)
+        public override async Task<long> Add(NotificationEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
@@ -42,20 +42,14 @@ namespace NetFrame.Infrastructure.Repositories
             if (entity.CreateUserName == null)
                 throw new ArgumentNullException("entity.CreatedUserName");
 
-            try
-            {
-                entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
-                    "INSERT INTO notifications(id, title, body, receiverusername, receiveruserfullname, sendtime, senderusername, senderuserfullname, readstatus, createtime, createusername, createipaddress) values(DEFAULT, @Title, @Body, @ReceiverUserName, @ReceiverUserFullname, @SendTime, @SenderUserName, @SenderUserFullname, @ReadStatus,  @CreateTime, @CreateUserName, @CreateIpAddress::inet) RETURNING id;",
-                    param: entity,
-                    transaction: UnitOfWork.Transaction);
 
-                return entity.Id;
-            }
-            catch (Exception ex)
-            {
-                return -1;
-                throw ex;
-            }
+            entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
+                "INSERT INTO notifications(id, title, body, receiverusername, receiveruserfullname, sendtime, senderusername, senderuserfullname, readstatus, createtime, createusername, createipaddress) values(DEFAULT, @Title, @Body, @ReceiverUserName, @ReceiverUserFullname, @SendTime, @SenderUserName, @SenderUserFullname, @ReadStatus,  @CreateTime, @CreateUserName, @CreateIpAddress::inet) RETURNING id;",
+                param: entity,
+                transaction: UnitOfWork.Transaction);
+
+            return entity.Id;
+
         }
 
         /// <summary>
@@ -67,17 +61,12 @@ namespace NetFrame.Infrastructure.Repositories
             if (entity == null)
                 throw new ArgumentNullException("entity");
 
-            try
-            {
-                await UnitOfWork.Connection.ExecuteAsync(
-                    "UPDATE notifications SET title = @Title, body = @Body, receiverusername = @ReceiverUserName, receiveruserfullname = @ReceiverUserFullname, sendtime = @SendTime, senderusername = @SenderUserName, senderuserfullname = @SenderUserFullname, readstatus = @ReadStatus,  updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
-                    param: entity,
-                    transaction: UnitOfWork.Transaction);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            await UnitOfWork.Connection.ExecuteAsync(
+                "UPDATE notifications SET title = @Title, body = @Body, receiverusername = @ReceiverUserName, receiveruserfullname = @ReceiverUserFullname, sendtime = @SendTime, senderusername = @SenderUserName, senderuserfullname = @SenderUserFullname, readstatus = @ReadStatus,  updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
+                param: entity,
+                transaction: UnitOfWork.Transaction);
+
         }
     }
 }

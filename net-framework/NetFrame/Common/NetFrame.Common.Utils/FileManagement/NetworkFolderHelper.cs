@@ -16,7 +16,7 @@ namespace NetFrame.Common.Utils.FileManagement
         {
             try
             {
-
+                RootPath = string.Empty;
                 Credentials = new NetworkCredential(user, pass, domain);
             }
             catch (System.Exception ex)
@@ -73,7 +73,7 @@ namespace NetFrame.Common.Utils.FileManagement
         /// <returns>byte dizisi</returns>
         public byte[] GetFileFromServer(GetFileArg arg)
         {
-            byte[] response = null;
+            byte[] response = null!;
             try
             {
                 //Mount to the network shared folder.
@@ -97,7 +97,7 @@ namespace NetFrame.Common.Utils.FileManagement
             {
                 throw new UtilsException("Dosya sunucudan okunurken hata oluştu.", exc);
             }
-            return response;
+            return response!;
         }
 
         public bool IsFileExists(GetFileArg arg)

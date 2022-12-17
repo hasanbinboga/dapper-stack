@@ -10,9 +10,9 @@ namespace NetFrame.Infrastructure.Repositories
         /// Constructor
         /// </summary>
         /// <param name="unitOfWork">Definitions of operations related to TaskActionAction data</param>
-        public TaskActionRepository(IUnitOfWork unitOfWork):base(unitOfWork)
+        public TaskActionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            
+
         }
 
         /// <summary>
@@ -41,20 +41,14 @@ namespace NetFrame.Infrastructure.Repositories
             if (entity.CreateUserName == null)
                 throw new ArgumentNullException("entity.CreatedUserName");
 
-            try
-            {
-                entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
-                    "INSERT INTO taskactions(id, taskref, actiontime, actiondescription, previousstatus, newstatus, createtime, createusername, createipaddress) values(DEFAULT, @TaskRef, @ActionTime, @ActionDescription, @PreviousStatus, @NewStatus, @CreateTime, @CreateUserName, @CreateIpAddress::inet) RETURNING id;",
-                    param: entity,
-                    transaction: UnitOfWork.Transaction);
 
-                return entity.Id;
-            }
-            catch (Exception ex)
-            {
-                return -1;
-                throw ex;
-            }
+            entity.Id = await UnitOfWork.Connection.ExecuteScalarAsync<long>(
+                "INSERT INTO taskactions(id, taskref, actiontime, actiondescription, previousstatus, newstatus, createtime, createusername, createipaddress) values(DEFAULT, @TaskRef, @ActionTime, @ActionDescription, @PreviousStatus, @NewStatus, @CreateTime, @CreateUserName, @CreateIpAddress::inet) RETURNING id;",
+                param: entity,
+                transaction: UnitOfWork.Transaction);
+
+            return entity.Id;
+
         }
 
         /// <summary>
@@ -83,7 +77,7 @@ namespace NetFrame.Infrastructure.Repositories
         {
             var criteria = "taskref = @TaskId";
             var order = "id";
-            return await (await GetMany(criteria, new {TaskId = taskId}, order)).ToListAsync();
+            return await (await GetMany(criteria, new { TaskId = taskId }, order)).ToListAsync();
         }
     }
 }

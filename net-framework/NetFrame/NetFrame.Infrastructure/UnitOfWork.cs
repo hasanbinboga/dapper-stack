@@ -104,7 +104,7 @@ namespace NetFrame.Infrastructure
                 return (IRepository<TEntity>)_repositories[typeof(TEntity)];
 
             var repositoryType = typeof(Repository<>);
-            _repositories.Add(typeof(TEntity), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), this));
+            _repositories.Add(typeof(TEntity), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), this)!);
 
             return _repositories[typeof(TEntity)];
         } 
@@ -194,11 +194,11 @@ namespace NetFrame.Infrastructure
 
             if (!_repositories.ContainsKey(typeof(T)))
             {
-                _repositories.Add(typeof(T), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), this));
+                _repositories.Add(typeof(T), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), this)!);
             }
             else
             {
-                _repositories[typeof(T)] = Activator.CreateInstance(repositoryType.MakeGenericType(repositoryType), this);
+                _repositories[typeof(T)] = Activator.CreateInstance(repositoryType.MakeGenericType(repositoryType), this)!;
             }
         }
 

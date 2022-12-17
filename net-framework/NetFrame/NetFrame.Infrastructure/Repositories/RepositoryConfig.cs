@@ -1,8 +1,6 @@
 ﻿using Dapper;
 using Dapper.FluentMap;
 using NetFrame.Core.Entities;
-using NetFrame.Infrastructure.Repositories;
-using NetFrame.Infrastructure.Repositories;
 using NetFrame.Infrasturcture.TypeWorks.EntityMappings;
 using NetFrame.Infrasturcture.TypeWorks.TypeHandlers;
 

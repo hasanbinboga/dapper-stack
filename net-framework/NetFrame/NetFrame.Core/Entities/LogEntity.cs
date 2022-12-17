@@ -15,39 +15,39 @@ namespace NetFrame.Core.Entities
         /// </summary>
          
         [Column("serviceuri")]
-        public string ServiceUri { get; set; }
+        public string ServiceUri { get; set; } = string.Empty;
 
         /// <summary>
         /// Controller class info of Service-WebApi.
         /// </summary>
 
         [Column("controller")]
-        public string Controller { get; set; }
+        public string Controller { get; set; } = string.Empty;
 
         /// <summary>
         /// Method name of Service-WebApi.
         /// </summary>
         [Column("method")] 
-        public string Method { get; set; }
+        public string Method { get; set; } = string.Empty;
 
         /// <summary>
         /// Request uri info
         /// </summary>
         [Column("requesturi")]
-        public string RequestUri { get; set; }
+        public string RequestUri { get; set; } = string.Empty;
 
         /// <summary>
         /// request object as json
         /// </summary>
         [Column("requestjsonobject")]
-        public string RequestJsonObject { get; set; }
+        public string RequestJsonObject { get; set; } = string.Empty;
 
-        
+
         /// <summary>
         /// Request object as xml
         /// </summary>
         [Column("requestxmlobject")]
-        public string RequestXmlObject { get; set; }
+        public string RequestXmlObject { get; set; } = string.Empty;
 
 
         /// <summary>
@@ -61,25 +61,25 @@ namespace NetFrame.Core.Entities
         /// Response object as json
         /// </summary>
         [Column("responsejsonobject")]
-        public string ResponseJsonObject { get; set; }
+        public string ResponseJsonObject { get; set; } = string.Empty;
 
         /// <summary>
         /// Response object as xml
         /// </summary>
         [Column("responsexmlobject")]
-        public string ResponseXmlObject { get; set; }
+        public string ResponseXmlObject { get; set; } = string.Empty;
 
         /// <summary>
         /// User name
         /// </summary> 
         [Column("username")] 
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
 
         /// <summary>
         /// User Ip address
         /// </summary>
         [Column("useripaddress")] 
-        public string UserIpAddress { get; set; }
+        public string UserIpAddress { get; set; } = string.Empty;
 
 
         /// <summary>

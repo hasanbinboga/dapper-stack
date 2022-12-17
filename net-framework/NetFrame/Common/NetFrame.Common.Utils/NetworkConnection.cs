@@ -96,10 +96,10 @@ namespace NetFrame.Common.Utils
             public ResourceType ResourceType;
             public ResourceDisplaytype DisplayType;
             public int Usage;
-            public string LocalName;
-            public string RemoteName;
-            public string Comment;
-            public string Provider;
+            public string LocalName = string.Empty;
+            public string RemoteName = string.Empty;
+            public string Comment = string.Empty;
+            public string Provider = string.Empty;
         }
 
         public enum ResourceScope

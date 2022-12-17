@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using NetFrame.Common.Exception;
 using NetFrame.Core;
-
+using NetFrame.Core.Entities.Validators;
 
 namespace NetFrame.Infrastructure.DataAcces
 {
@@ -9,7 +9,7 @@ namespace NetFrame.Infrastructure.DataAcces
     {
         public UnitOfWork UnitOfWork { get; }
 
-        public AbstractValidator<T> Validator { get; }
+        public AbstractValidator<T> Validator { get; } = new EntityValidator<T>();
 
         protected EntityDataAccess(UnitOfWork unitOfWork)
         {
@@ -41,7 +41,7 @@ namespace NetFrame.Infrastructure.DataAcces
                 }
                 else
                 {
-                    throw new ValidationCoreException(validation.Errors.ToString());
+                    throw new ValidationCoreException(validation.Errors.ToString()!);
                 }
             }
             else
@@ -62,7 +62,7 @@ namespace NetFrame.Infrastructure.DataAcces
                 }
                 else
                 {
-                    throw new ValidationCoreException(validation.Errors.ToString());
+                    throw new ValidationCoreException(validation.Errors.ToString()!)!;
                 }
             }
             else

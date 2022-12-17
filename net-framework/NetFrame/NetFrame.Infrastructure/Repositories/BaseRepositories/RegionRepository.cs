@@ -11,22 +11,23 @@ namespace NetFrame.Infrastructure.Repositories
 
         public override async Task<long>Add(RegionEntity entity)
         {
-            return 0;
+           return await Task.Run(() => { return 0; });
         }
 
         public override async Task<List<long>> Add(IEnumerable<RegionEntity> entities)
         {
-            return null;
+            return await Task.Run(() => { return new List<long>(); });
         }
 
         public override async Task Update(RegionEntity entity)
         {
+            await Task.Run(() => {   });
         } 
        
         
         public new List<AuditChange> GetAudit(long id)
         {
-            return null;
+            return null!;
         }
 
         public OptionEntity[] GetList()

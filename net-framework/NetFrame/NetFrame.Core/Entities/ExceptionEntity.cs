@@ -14,12 +14,12 @@ namespace NetFrame.Core.Entities
         /// Exception module name max 2000 chars
         /// </summary>
         [Column("modulename")]
-        public string ModuleName { get; set; }
+        public string ModuleName { get; set; } = string.Empty;
         /// <summary>
         /// Class name of that throw exception. max 2000 chars
         /// </summary>
         [Column("classname")]
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = string.Empty;
         /// <summary>
         /// Exception code info
         /// </summary>
@@ -29,18 +29,18 @@ namespace NetFrame.Core.Entities
         /// Exception description max 2000 chars
         /// </summary>
         [Column("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         /// <summary>
         /// Exception stack trace info max 8000 chars
         /// </summary>
         [Column("stacktrace")]
-        public string Stacktrace { get; set; }
+        public string Stacktrace { get; set; } = string.Empty;
         /// <summary>
         /// Exception type max 2000 chars
         /// </summary> 
         [Column("exceptiontype")]
-        public string ExceptionType { get; set; }
+        public string ExceptionType { get; set; } = string.Empty;
     }
 
     public class ExceptionEntityValidator : BaseEntityValidator<ExceptionEntity>

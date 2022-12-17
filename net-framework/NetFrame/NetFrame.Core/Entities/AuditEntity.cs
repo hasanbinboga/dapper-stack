@@ -19,22 +19,22 @@ namespace NetFrame.Core.Entities
         ///The type information of which data is kept, along with the namespace of that data
         /// </summary> 
         [Column("datamodel")]
-        public string DataModel { get; set; }
+        public string DataModel { get; set; } = string.Empty;
         /// <summary>
         /// The value of the audit received data before the change is json
         /// </summary>
         [Column("valuebefore")]
-        public string ValueBefore { get; set; }
+        public string ValueBefore { get; set; } = string.Empty;
         /// <summary>
         /// The value of audit received data after change is json
         /// </summary>
         [Column("valueafter")]
-        public string ValueAfter { get; set; }
+        public string ValueAfter { get; set; } = string.Empty;
         /// <summary>
         /// field-based change information as json
         /// </summary>
         [Column("changes")]
-        public string Changes { get; set; }
+        public string Changes { get; set; } = string.Empty;
         /// <summary>
         /// the type of change made.
         /// public enum AuditActionType
@@ -57,13 +57,13 @@ namespace NetFrame.Core.Entities
         ///  Information FROM which application the change was made
         /// </summary>
         [Column("applicationname")]
-        public string ApplicationName { get; set; }
+        public string ApplicationName { get; set; } = string.Empty;
 
         /// <summary>
         /// Create Time
         /// </summary>
         [Column("createtime")]
-        public DateTime CreateTime { get; set; }
+        public DateTime CreateTime { get; set; } 
 
         /// <summary>
         ///  Create Ip Address
@@ -71,14 +71,14 @@ namespace NetFrame.Core.Entities
 
         [StringLength(100, ErrorMessage = "")]
         [Column("createipaddress")]
-        public string CreateIpAddress { get; set; }
+        public string CreateIpAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// Create UserName
         /// </summary>
         [StringLength(255, ErrorMessage = "")]
         [Column("createusername")]
-        public string CreateUserName { get; set; }
+        public string CreateUserName { get; set; } = string.Empty;
     }
 
 

@@ -1,12 +1,14 @@
 ﻿using NetFrame.Common.Exception;
 using System.Collections;
 using System.DirectoryServices.AccountManagement;
+using System.Runtime.Versioning;
 
 namespace NetFrame.Common.Utils
 {
     /// <summary>
     /// Active Directory fonksiyonlarını içeren sınıf 
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public class ActiveDirectoryHelper
     {
         #region Variables
@@ -279,7 +281,7 @@ namespace NetFrame.Common.Utils
                     if (!IsUserGroupMember(sUserName, sGroupName))
                     {
                         oGroupPrincipal?.Members.Add(oUserPrincipal);
-                        oGroupPrincipal.Save();
+                        oGroupPrincipal!.Save();
                     }
                 }
                 return true;

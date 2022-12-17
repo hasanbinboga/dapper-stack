@@ -14,23 +14,23 @@ namespace NetFrame.Core.Entities
         /// Notification Title max 2000 chars 
         /// </summary> 
         [Column("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         /// <summary>
         /// Notification message max 2000 chars 
         /// </summary> 
         [Column("body")]
-        public string Body { get; set; }
+        public string Body { get; set; } = string.Empty;
         /// <summary>
         /// Receiver user name max 255 chars 
         /// </summary>
         [Column("receiverusername")]
-        public string ReceiverUserName { get; set; }
+        public string ReceiverUserName { get; set; } = string.Empty;
 
         /// <summary>
         /// Receiver user full name max 255 chars 
         /// </summary>
         [Column("receiveruserfullname")]
-        public string ReceiverUserFullname { get; set; }
+        public string ReceiverUserFullname { get; set; } = string.Empty;
 
         /// <summary>
         /// Send time
@@ -41,13 +41,13 @@ namespace NetFrame.Core.Entities
         /// Sender info max 255 chars 
         /// </summary>
         [Column("senderusername")]
-        public string SenderUserName { get; set; }
+        public string SenderUserName { get; set; } = string.Empty;
 
         /// <summary>
         /// Sender user full name max 255 chars 
         /// </summary>
         [Column("senderuserfullname")]
-        public string SenderUserFullname { get; set; }
+        public string SenderUserFullname { get; set; } = string.Empty;
 
         /// <summary>
         /// Read status

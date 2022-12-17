@@ -46,7 +46,7 @@ namespace NetFrame.Infrastructure.DataAcces
             }
             else
             {
-                throw new ValidationCoreException(validation.Errors.ToString());
+                throw new ValidationCoreException(validation.Errors.ToString()!);
             }
         }
 
@@ -59,7 +59,7 @@ namespace NetFrame.Infrastructure.DataAcces
             }
             else
             {
-                throw new ValidationCoreException(validation.Errors.ToString());
+                throw new ValidationCoreException(validation.Errors.ToString()!);
             }
         }
 

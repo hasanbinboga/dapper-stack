@@ -23,7 +23,7 @@ namespace NetFrame.Infrasturcture.TypeWorks.TypeHandlers
             {
                 return ((IPAddress)value).ToString();
             }
-            return value.ToString();
+            return value.ToString()!;
         }
     }
 }

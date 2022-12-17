@@ -26,14 +26,14 @@ namespace NetFrame.Core
 
         [StringLength(100, ErrorMessage = "")]
         [Column("createipaddress")]
-        public string CreateIpAddress { get; set; }
+        public string CreateIpAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// Id of the user who added the data
         /// </summary>
         [StringLength(255, ErrorMessage = "")]
         [Column("createusername")]
-        public string CreateUserName { get; set; }
+        public string CreateUserName { get; set; } = string.Empty;
 
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace NetFrame.Core
         /// </summary>
         [StringLength(255, ErrorMessage = "")]
         [Column("updateusername")]
-        public string UpdateUserName { get; set; }
+        public string UpdateUserName { get; set; } = string.Empty;
 
         /// <summary>
         /// User IP information updating data
         /// </summary>
         [StringLength(100, ErrorMessage = "")]
         [Column("updateipaddress")]
-        public string UpdateIpAddress { get; set; }
+        public string UpdateIpAddress { get; set; } = string.Empty;
 
 
         /// <summary>
@@ -56,6 +56,6 @@ namespace NetFrame.Core
         /// </summary>
         [StringLength(100, ErrorMessage = "")]
         [Column("history")]
-        public  dynamic[] History { get; set; }
+        public  dynamic[] History { get; set; } = new dynamic[0];
     }
 }

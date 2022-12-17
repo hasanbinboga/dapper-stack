@@ -17,7 +17,7 @@ namespace NetFrame.Common.Extension
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return null;
+                return null!;
             }
             if (value.Length > 1)
             {
@@ -36,7 +36,7 @@ namespace NetFrame.Common.Extension
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return null;
+                return null!;
             }
 
             string[] wordList = value.Split(seperator);

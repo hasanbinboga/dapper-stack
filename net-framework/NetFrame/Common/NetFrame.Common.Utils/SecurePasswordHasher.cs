@@ -3,6 +3,8 @@ using System.Security.Cryptography;
 
 namespace NetFrame.Common.Utils
 {
+#pragma warning disable SYSLIB0023
+#pragma warning disable SYSLIB0041
     /// <summary>
     /// Class containing password hash functions
     /// </summary>

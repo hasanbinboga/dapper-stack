@@ -11,7 +11,7 @@ namespace NetFrame.Infrastructure.Repositories
 
         public new List<AuditChange> GetAudit(long id)
         {
-            return null;
+            return null!;
         }
 
         public OptionEntity[] GetList()

@@ -33,7 +33,7 @@ namespace NetFrame.Core.Dtos
                     PageNumber = metaData.PageNumber,
                     PageSize = metaData.PageSize
                 }
-                : null;
+                : new PaginationMetaData();
         }
     }
 

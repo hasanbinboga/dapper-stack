@@ -26,7 +26,7 @@ namespace NetFrame.Core.Entities
         /// Action description max 2000 chars
         /// </summary>
         [Column("actiondescription")] 
-        public string ActionDescription { get; set; }
+        public string ActionDescription { get; set; } = string.Empty;
 
         /// <summary>
         /// Previous status

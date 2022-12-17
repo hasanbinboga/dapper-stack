@@ -14,7 +14,7 @@ namespace NetFrame.Common.Utils.Search
         /// <summary>
         /// Property ismi
         /// </summary>
-        public string PropertyName { get; set; }
+        public string PropertyName { get; set; } = string.Empty;
 
         /// <summary>
         /// Filtre Operasyonu
@@ -24,6 +24,6 @@ namespace NetFrame.Common.Utils.Search
         /// <summary>
         /// değer bilgisi
         /// </summary>
-        public object Value { get; set; }
+        public object Value { get; set; } = string.Empty;
     }
 }

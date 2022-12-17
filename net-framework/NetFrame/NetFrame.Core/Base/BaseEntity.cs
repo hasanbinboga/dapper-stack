@@ -24,32 +24,32 @@ namespace NetFrame.Core
         /// User IP information that added the data
         /// </summary> 
         [Column("createipaddress")]
-        public string CreateIpAddress { get; set; }
+        public string CreateIpAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// Id of the user who added the data
         /// </summary> 
         [Column("createusername")]
-        public string CreateUserName { get; set; }
+        public string CreateUserName { get; set; } = string.Empty;
 
 
         /// <summary>
         /// User Id information that updated the data
         /// </summary> 
         [Column("updateusername")]
-        public string UpdateUserName { get; set; }
+        public string UpdateUserName { get; set; } = string.Empty;
 
         /// <summary>
         /// User IP information updating data
         /// </summary> 
         [Column("updateipaddress")]
-        public string UpdateIpAddress { get; set; }
+        public string UpdateIpAddress { get; set; } = string.Empty;
 
 
         /// <summary>
         /// Entity's data history information
         /// </summary> 
         [Column("history")]
-        public dynamic[] History { get; set; }
+        public dynamic[] History { get; set; } = new dynamic[] { };
     }
 }

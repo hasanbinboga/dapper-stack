@@ -41,32 +41,32 @@ namespace NetFrame.Infrastructure.Caches
         {
             var expirationDate = DateTimeOffset.UtcNow.AddYears(1);
 
-            if (!Cache.TryGetValue("Regions", out List<OptionDto> cities))
+            if (!Cache.TryGetValue("Regions", out List<OptionDto>?cities))
             {
                 var cityEntities = await ((IRegionRepository)_unitOfWork.Repository<CityEntity>()).GetAll();
                     
                 var cityList = cityEntities.Select(a => new OptionDto { Value = a.Id.ToString(), Label = a.Name }).OrderBy(p => p.Label).ToList();
 
                 Cache.Set("Regions", cityList, expirationDate);
-                Cache.TryGetValue("Regions", out cities);
+                Cache.TryGetValue("Regions", out cities!);
             }
-            return cities;
+            return cities!;
         }
 
         private async Task<List<OptionDto>> GetOrCrateCities()
         {
             var expirationDate = DateTimeOffset.UtcNow.AddYears(1);
 
-            if (!Cache.TryGetValue("Cities", out List<OptionDto> cities))
+            if (!Cache.TryGetValue("Cities", out List<OptionDto>? cities))
             {
                 var cityEntities = await ((ICityRepository)_unitOfWork.Repository<CityEntity>()).GetAll();
 
                 var cityList = cityEntities.Select(a => new OptionDto { Value = a.Id.ToString(), Label = a.Name }).OrderBy(p => p.Label).ToList();
 
                 Cache.Set("Cities", cityList, expirationDate);
-                Cache.TryGetValue("Cities", out cities);
+                Cache.TryGetValue("Cities", out cities!);
             }
-            return cities;
+            return cities!;
         } 
        
         public async Task SetCommonCacheItems()
@@ -77,8 +77,12 @@ namespace NetFrame.Infrastructure.Caches
 
         public async Task RemoveCommonCacheItems()
         {
-            Cache.Remove("Regions");
-            Cache.Remove("Cities");
+
+            await Task.Run(() => {
+                Cache.Remove("Regions");
+                Cache.Remove("Cities");
+            });
+            
         }
     }
 }

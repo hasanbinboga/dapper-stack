@@ -8,7 +8,7 @@
         /// <summary>
         /// Shows when data has changed
         /// </summary>
-        public string DateTimeStamp { get; set; }
+        public string DateTimeStamp { get; set; } = string.Empty;
         /// <summary>
         /// Indicates the type of change made to the data
         /// </summary>
@@ -16,7 +16,7 @@
         /// <summary>
         /// Shows which entity was modified
         /// </summary>
-        public string AuditActionTypeName { get; set; }
+        public string AuditActionTypeName { get; set; } = string.Empty;
         /// <summary>
         /// Shows the old and new values on the fields of the changed entity
         /// </summary>

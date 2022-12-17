@@ -14,7 +14,7 @@ namespace NetFrame.Core.Entities
         /// Log exception info
         /// </summary>
         [Column("exception")]
-        public string Exception { get; set; }
+        public string Exception { get; set; } = string.Empty;
     }
 
 

@@ -19,7 +19,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// <summary>
         /// Genel repository sınıfı oluşturma (contructor)
         /// </summary>
-        /// <param name="unitOfWork">reposiyory de kullanılan entity nin içinde bulunduğu context instance bilgisi</param> 
+        /// <param name="unitOfWork">Context instance information of the entity used in the repository</param> 
         public BaseRepository(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
@@ -32,7 +32,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<List<long>> Add(IEnumerable<T> entities)
         {
             //Due to Dapper's approach it is not possible to describe it here.
-            throw new NotImplementedException();
+           return await Task.Run(List<long> () => { throw new NotImplementedException(); });
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task<long> Add(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
-            throw new NotImplementedException();
+            return await Task.Run(long () => { throw new NotImplementedException(); });
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace NetFrame.Infrastructure.Repositories
         public virtual async Task Update(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
-            throw new NotImplementedException();
+            await Task.Run(() => { throw new NotImplementedException(); });
         }
 
         /// <summary>
@@ -305,10 +305,10 @@ namespace NetFrame.Infrastructure.Repositories
                 AuditChange change = new AuditChange();
                 change.DateTimeStamp = record.CreateTime.ToString();
                 change.AuditActionType = (AuditActionType)record.ActionType;
-                change.AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType);
+                change.AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)!;
                 if (!string.IsNullOrEmpty(record.Changes))
                 {
-                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record.Changes);
+                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record.Changes)!;
                     change.Changes.AddRange(delta);
                 }
 

@@ -8,6 +8,6 @@ namespace NetFrame.Core.Dtos
         public long Id { get; set; }
 
         [JsonProperty(PropertyName = "metin")]
-        public string Metin { get; set; }
+        public string Metin { get; set; } = string.Empty;
     }
 }

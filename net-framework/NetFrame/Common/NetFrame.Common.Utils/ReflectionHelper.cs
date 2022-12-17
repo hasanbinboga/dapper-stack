@@ -20,7 +20,7 @@ namespace NetFrame.Common.Utils
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic |
                                  BindingFlags.Static | BindingFlags.Instance |
                                  BindingFlags.DeclaredOnly;
-            return t.GetFields(flags).Concat(GetAllFields(t.BaseType));
+            return t.GetFields(flags).Concat(GetAllFields(t.BaseType!));
         }
         /// <summary>
         /// Returns the fieldInfo of the field called Field
@@ -32,7 +32,7 @@ namespace NetFrame.Common.Utils
         {
             if (T == null)
             {
-                return null;
+                return null!;
             }
 
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic |
@@ -40,17 +40,17 @@ namespace NetFrame.Common.Utils
                                  BindingFlags.DeclaredOnly | BindingFlags.IgnoreCase;
             try
             {
-                FieldInfo info = T.GetField(fieldName, flags);
+                FieldInfo info = T.GetField(fieldName, flags)!;
                 if (info == null)
                 {
-                    return GetNamedField(T.BaseType, fieldName);
+                    return GetNamedField(T.BaseType!, fieldName);
                 }
 
                 return info;
             }
             catch (System.Exception)
             {
-                return GetNamedField(T.BaseType, fieldName);
+                return GetNamedField(T.BaseType!, fieldName);
             }
         }
         /// <summary>
@@ -63,7 +63,7 @@ namespace NetFrame.Common.Utils
         {
             if (T == null)
             {
-                return null;
+                return null!;
             }
 
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic |
@@ -71,17 +71,17 @@ namespace NetFrame.Common.Utils
                                  BindingFlags.DeclaredOnly | BindingFlags.IgnoreCase;
             try
             {
-                PropertyInfo info = T?.GetProperty(propertyName, flags);
+                PropertyInfo info = T?.GetProperty(propertyName, flags)!;
                 if (info == null)
                 {
-                    return GetNamedProperty(T.BaseType, propertyName);
+                    return GetNamedProperty(T!.BaseType!, propertyName);
                 }
 
                 return info;
             }
             catch (System.Exception)
             {
-                return GetNamedProperty(T.BaseType, propertyName);
+                return GetNamedProperty(T.BaseType!, propertyName);
             }
         }
     }

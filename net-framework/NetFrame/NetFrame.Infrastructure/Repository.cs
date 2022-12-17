@@ -31,7 +31,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Provides the registration of the listed entities to the database
         /// </summary>
         /// <param name="entities">Entity list to be saved</param>
-        public virtual async Task<List<long>> Add(IEnumerable<T> entities)
+        public virtual Task<List<long>> Add(IEnumerable<T> entities)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -41,7 +41,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// It provides the registration operations of the given single entity to the database.
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual async Task<long> Add(T entity)
+        public virtual Task<long> Add(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -51,7 +51,7 @@ namespace NetFrame.Infrastructure.Repositories
         /// Allows the specified entity to be updated in the database.
         /// </summary>
         /// <param name="entity"Updated version of the data requested to be updated in the database </param>
-        public virtual async Task Update(T entity)
+        public virtual Task Update(T entity)
         {
             //Due to Dapper's approach it is not possible to describe it here.
             throw new NotImplementedException();
@@ -287,11 +287,11 @@ namespace NetFrame.Infrastructure.Repositories
             {
                 AuditChange change = new AuditChange();
                 change.DateTimeStamp = record.CreateTime.ToString();
-                change.AuditActionType = (AuditActionType)record.ActionType;
-                change.AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType);
+                change.AuditActionType = record.ActionType;
+                change.AuditActionTypeName = Enum.GetName(typeof(AuditActionType), record.ActionType)!;
                 if (!string.IsNullOrEmpty(record.Changes))
                 {
-                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record.Changes);
+                    List<AuditDelta> delta = JsonConvert.DeserializeObject<List<AuditDelta>>(record.Changes)!;
                     change.Changes.AddRange(delta);
                 }
 

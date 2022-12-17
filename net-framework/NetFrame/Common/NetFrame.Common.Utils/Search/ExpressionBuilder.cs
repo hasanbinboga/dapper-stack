@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -11,9 +9,9 @@ namespace NetFrame.Common.Utils.Search
     /// </summary>
     public static class ExpressionBuilder
     {
-        private static readonly MethodInfo ContainsMethod = typeof(string).GetMethod("Contains");
-        private static readonly MethodInfo StartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) , typeof(bool), typeof(CultureInfo)});
-        private static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string), typeof(bool), typeof(CultureInfo) });
+        private static readonly MethodInfo ContainsMethod = typeof(string).GetMethod("Contains")!;
+        private static readonly MethodInfo StartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) , typeof(bool), typeof(CultureInfo)})!;
+        private static readonly MethodInfo EndsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string), typeof(bool), typeof(CultureInfo) })!;
 
         /// <summary>
         /// Gelen SearchFilter değerlerine göre Expression üretmeyi sağlar.
@@ -23,10 +21,11 @@ namespace NetFrame.Common.Utils.Search
         /// <returns>Oluşturulan expression değerini döner</returns>
         public static Expression<Func<T, bool>> GetExpression<T>(IList<SearchFilter> filters)
         {
-            if (filters.Count == 0)
-                return null;
-
             ParameterExpression param = Expression.Parameter(typeof(T), "t");
+
+            if (filters.Count == 0)
+                return Expression.Lambda<Func<T, bool>>(GetExpression<T>(param, new SearchFilter()) , false);
+
             Expression? exp = null;
              
             if (filters.Count == 1)
@@ -57,7 +56,7 @@ namespace NetFrame.Common.Utils.Search
             }
 
             // ReSharper disable once AssignNullToNotNullAttribute
-            return Expression.Lambda<Func<T, bool>>(exp, param);
+            return Expression.Lambda<Func<T, bool>>(exp!, param);
         }
 
         /// <summary>
@@ -102,7 +101,7 @@ namespace NetFrame.Common.Utils.Search
                     return Expression.Call(member, EndsWithMethod, filterValue, ignoreCase, turkishCulture);
             }
 
-            return null;
+            return null!;
         }
 
         /// <summary>

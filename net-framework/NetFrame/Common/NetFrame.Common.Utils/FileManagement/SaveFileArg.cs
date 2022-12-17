@@ -8,8 +8,8 @@ namespace NetFrame.Common.Utils.FileManagement
 {
     public class SaveFileArg
     {
-        public string Path { get; set; }
-        public string FileName { get; set; }
-        public byte[] FileBytes { get; set; }
+        public string Path { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public byte[] FileBytes { get; set; } = new byte[1024];
     }
 }

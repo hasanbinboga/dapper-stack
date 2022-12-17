@@ -8,14 +8,14 @@
         /// <summary>
         /// changed entity field name
         /// </summary>
-        public string FieldName { get; set; }
+        public string FieldName { get; set; } = string.Empty;
         /// <summary>
         /// Value of the Entity field before modification
         /// </summary>
-        public string OldValue { get; set; }
+        public string OldValue { get; set; } = string.Empty;
         /// <summary>
         /// Post-change value of the Entity field
         /// </summary>
-        public string NewValue { get; set; }
+        public string NewValue { get; set; } = string.Empty;
     }
 }

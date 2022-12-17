@@ -13,6 +13,6 @@ namespace NetFrame.Core.Dtos
         public long ResimRef { get; set; }
 
         [JsonProperty(PropertyName = "history")]
-        public HistoryDto[] History { get; set; }
+        public HistoryDto[] History { get; set; } = new HistoryDto[0];
     }
 }

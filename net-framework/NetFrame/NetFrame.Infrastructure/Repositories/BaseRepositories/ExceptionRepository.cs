@@ -67,17 +67,12 @@ namespace NetFrame.Infrastructure.Repositories
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            try
-            {
-                await UnitOfWork.Connection.ExecuteAsync(
-                    "UPDATE exceptions SET modulename=@ModuleName, classname=@ClassName, exceptioncode=@ExceptionCode, description=@Description, stacktrace=@Stacktrace, exceptiontype=@ExceptionType, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
-                    param: entity,
-                    transaction: UnitOfWork.Transaction);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            await UnitOfWork.Connection.ExecuteAsync(
+                "UPDATE exceptions SET modulename=@ModuleName, classname=@ClassName, exceptioncode=@ExceptionCode, description=@Description, stacktrace=@Stacktrace, exceptiontype=@ExceptionType, updatetime=@UpdateTime, updateusername=@UpdateUserName,  updateipaddress=@UpdateIpAddress::inet  WHERE id = @Id",
+                param: entity,
+                transaction: UnitOfWork.Transaction);
+
         }
     }
 }
