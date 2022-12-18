@@ -10,9 +10,9 @@ namespace NetFrame.Infrastructure.Caches
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CacheHelper(IUnitOfWork evitalUnitOfWork, IMemoryCache cache)
+        public CacheHelper(IUnitOfWork UnitOfWork, IMemoryCache cache)
         {
-            _unitOfWork = evitalUnitOfWork;
+            _unitOfWork = UnitOfWork;
             Cache = cache;
         }
 

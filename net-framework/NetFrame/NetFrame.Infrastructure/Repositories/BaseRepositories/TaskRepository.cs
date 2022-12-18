@@ -57,7 +57,7 @@ namespace NetFrame.Infrastructure.Repositories
                     foreach (var taskAction in entity.TaskActions)
                     {
                         taskAction.TaskRef = entity.Id;
-                        actionsRepo.Add(taskAction);
+                        await actionsRepo.Add(taskAction);
                     }
                 }
 
