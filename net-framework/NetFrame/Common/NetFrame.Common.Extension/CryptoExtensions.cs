@@ -8,6 +8,8 @@ namespace NetFrame.Common.Extension
     /// www: http://crackstation.net/hashing-security.htm
     /// Compatibility: .NET 3.0 and later.
     /// </summary>
+#pragma warning disable SYSLIB0023
+#pragma warning disable SYSLIB0041
     public class CryptoExtensions
     {
         // The following constants may be changed without breaking existing hashes.
