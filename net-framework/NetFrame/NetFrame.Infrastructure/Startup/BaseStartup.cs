@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using NetFrame.Infrastructure.Caches;
+using NetFrame.Infrastructure.DataAcces;
 using NetFrame.Infrastructure.WebToken;
 using System.Globalization;
 using System.Text;
@@ -58,6 +59,16 @@ namespace NetFrame.Infrastructure.Startup
             services.AddScoped<ICacheHelper, CacheHelper>();
 
             services.AddAutoMapper();
+
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+            services.AddScoped<IAuditDataAccess, AuditDataAccess>();
+            services.AddScoped<ICityDataAccess, CityDataAccess>();
+            services.AddScoped<IErrorLogDataAccess, ErrorLogDataAccess>();
+            services.AddScoped<IInfoLogDataAccess, InfoLogDataAccess>();
+
 
             services.AddMvc(option =>
             {

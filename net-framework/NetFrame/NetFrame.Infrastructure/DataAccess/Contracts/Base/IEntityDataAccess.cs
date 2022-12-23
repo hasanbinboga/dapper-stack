@@ -14,7 +14,7 @@ namespace NetFrame.Infrastructure.DataAcces
 
         Task Update(T value);
 
-        Task Add(T value);
+        Task<long> Add(T value);
 
         Task Passive(long id, string userName, string ipAddress);
 

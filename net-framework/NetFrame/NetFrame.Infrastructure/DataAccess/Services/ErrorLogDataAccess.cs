@@ -3,7 +3,7 @@
 
 namespace NetFrame.Infrastructure.DataAcces
 {
-    public class ErrorLogDataAccess : EntityDataAccess<ErrorLogEntity>
+    public class ErrorLogDataAccess : EntityDataAccess<ErrorLogEntity>, IErrorLogDataAccess
     {
         public ErrorLogDataAccess(UnitOfWork unitOfWork) : base(unitOfWork, new ErrorLogEntityValidator())
         {
