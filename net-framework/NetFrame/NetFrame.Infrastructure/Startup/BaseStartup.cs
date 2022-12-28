@@ -68,6 +68,11 @@ namespace NetFrame.Infrastructure.Startup
             services.AddScoped<ICityDataAccess, CityDataAccess>();
             services.AddScoped<IErrorLogDataAccess, ErrorLogDataAccess>();
             services.AddScoped<IInfoLogDataAccess, InfoLogDataAccess>();
+            services.AddScoped<IMessageDataAccess, MessageDataAccess>();
+            services.AddScoped<INotificationDataAccess, NotificationDataAccess>();
+            services.AddScoped<IRegionDataAccess, RegionDataAccess>();
+            services.AddScoped<ITaskActionDataAccess, TaskActionDataAccess>();
+            services.AddScoped<ITaskDataAccess, TaskDataAccess>();
 
 
             services.AddMvc(option =>

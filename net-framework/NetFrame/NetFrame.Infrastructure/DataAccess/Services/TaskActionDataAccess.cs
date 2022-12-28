@@ -3,7 +3,7 @@
 
 namespace NetFrame.Infrastructure.DataAcces
 {
-    public class TaskActionDataAccess : EntityDataAccess<TaskActionEntity>
+    public class TaskActionDataAccess : EntityDataAccess<TaskActionEntity>, ITaskActionDataAccess
     {
         public TaskActionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork, new TaskActionEntityValidator())
         {
