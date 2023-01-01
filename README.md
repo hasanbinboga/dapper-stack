@@ -12,3 +12,5 @@ I decided to use public database for tests and development. Database connection 
 First, I added the fields that are in the basic entity class but not included in the tables to the existing entities. 
 
 ![image](https://user-images.githubusercontent.com/27738643/210181405-61339564-266f-4405-9832-1b5a619d872f.png)
+
+Relationships between old tables were not defined. I created these relationships in the new tables. You can find the create scripts I created for new tables in this folder.
