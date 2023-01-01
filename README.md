@@ -10,3 +10,5 @@ I decided to use public database for tests and development. Database connection 
 ![image](https://user-images.githubusercontent.com/27738643/209881065-640de29f-781a-4c2f-a9d0-f7ca5af6cd60.png)
 
 First, I added the fields that are in the basic entity class but not included in the tables to the existing entities. 
+
+![image](https://user-images.githubusercontent.com/27738643/210181405-61339564-266f-4405-9832-1b5a619d872f.png)
