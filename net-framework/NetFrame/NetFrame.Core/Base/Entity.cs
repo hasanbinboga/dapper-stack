@@ -18,7 +18,7 @@ namespace NetFrame.Core
         /// <summary>
         /// Data activity information
         /// </summary>
-        [Column("isdeleted")]
+        [Column("is_deleted")]
         public bool IsDeleted { get; set; }
     }
 }
